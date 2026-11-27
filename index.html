@@ -148,56 +148,56 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
     #clock{font-size:26px}
   }
 }
-/* ===== 정사각형 화면 (블랙베리 Q20 등): 화면 높이(vh)에 맞춰 모두 한 화면에.
-   속도 표시창은 원래 높이(약 68vh)의 2/3인 45vh, 남는 공간엔 가까운 카메라 목록 ===== */
+/* ===== 정사각형 화면 (블랙베리 Q20 등) — 높이는 실제 보이는 높이(--vh, 주소창 제외) 기준.: 화면 높이(vh)에 맞춰 모두 한 화면에.
+   속도 표시창은 원래 높이(약 calc(var(--vh,1vh)*68))의 2/3인 calc(var(--vh,1vh)*45), 남는 공간엔 가까운 카메라 목록 ===== */
 @media (min-aspect-ratio:4/5) and (max-aspect-ratio:5/4) and (max-width:1000px){
   html,body{height:100%;overflow:hidden}
-  body{font-size:4.2vh}
-  .app{height:100vh;max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 45vh minmax(0,1fr) auto auto;grid-gap:1.4vh;gap:1.4vh;padding:1.4vh}
+  body{font-size:calc(var(--vh,1vh)*4.2)}
+  .app{height:calc(var(--vh,1vh)*100);max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto calc(var(--vh,1vh)*45) minmax(0,1fr) auto auto;grid-gap:calc(var(--vh,1vh)*1.4);gap:calc(var(--vh,1vh)*1.4);padding:calc(var(--vh,1vh)*1.4)}
   .rail{display:contents}.status{order:-1;flex-direction:row;align-items:center}
   .rail>div:empty{display:none}
   .status{padding:0 .6vh}
-  #clock{font-size:5vh}
+  #clock{font-size:calc(var(--vh,1vh)*5)}
   .chips{flex-direction:row}
-  .chip{font-size:3vh;padding:.3vh 1.8vh}
-  .chips .chip{margin:0 0 0 1.2vh}
-  .frame{border-radius:4.4vh;min-height:0;padding:.8vh}
-  .screen{border-radius:3.6vh;padding:1.5vh 2.8vh;align-content:center}
+  .chip{font-size:calc(var(--vh,1vh)*3);padding:.3vh calc(var(--vh,1vh)*1.8)}
+  .chips .chip{margin:0 0 0 calc(var(--vh,1vh)*1.2)}
+  .frame{border-radius:calc(var(--vh,1vh)*4.4);min-height:0;padding:.8vh}
+  .screen{border-radius:calc(var(--vh,1vh)*3.6);padding:calc(var(--vh,1vh)*1.5) calc(var(--vh,1vh)*2.8);align-content:center}
   .dial{display:none}
-  .top{grid-template-columns:21vh minmax(0,1fr);grid-gap:2vh;gap:2vh}
-  .sign,.sign.none{width:19.5vh;height:19.5vh;border-width:1.9vh}
-  .sign{font-size:8.6vh;letter-spacing:-.3vh}
-  .sign.none{font-size:3vh}
-  .speed b{font-size:14.7vh;letter-spacing:-.5vh}
-  .speed span{font-size:2.8vh;margin-top:0}
+  .top{grid-template-columns:calc(var(--vh,1vh)*21) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*2);gap:calc(var(--vh,1vh)*2)}
+  .sign,.sign.none{width:calc(var(--vh,1vh)*19.5);height:calc(var(--vh,1vh)*19.5);border-width:calc(var(--vh,1vh)*1.9)}
+  .sign{font-size:calc(var(--vh,1vh)*8.6);letter-spacing:-.3vh}
+  .sign.none{font-size:calc(var(--vh,1vh)*3)}
+  .speed b{font-size:calc(var(--vh,1vh)*14.7);letter-spacing:-.5vh}
+  .speed span{font-size:calc(var(--vh,1vh)*2.8);margin-top:0}
   .side{grid-column:1/-1}
   .info{margin-top:.8vh;padding-top:.8vh;min-height:0}
-  .info .t{font-size:3.6vh;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .info .p{font-size:2.6vh;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .gauge{margin-top:.8vh;grid-gap:1.5vh;gap:1.5vh}
-  #dist{font-size:4.6vh;min-width:0}
-  .segs{height:2.6vh;grid-gap:.6vh;gap:.6vh}
-  .simbadge{font-size:2.4vh;padding:.2vh 2vh;top:.5vh}
-  .mainNear{display:block;min-height:0;overflow:hidden;border-radius:3.6vh;border:1px solid #1b3350;background:linear-gradient(180deg,#0a1525,#060c16);padding:.4vh 2.8vh}
-  .mainNear ul.near li{grid-template-columns:15vh minmax(0,1fr) 8vh;gap:2.2vh;padding:1vh 0}
-  .mainNear .d{font-size:4vh}
-  .mainNear .pl{font-size:3.6vh;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mainNear .pl em{font-size:2.8vh}
-  .mainNear .lim{width:7.6vh;height:7.6vh;border-width:.9vh;font-size:3.2vh}
-  #msg{min-height:0;font-size:3.3vh;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .keys{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-gap:1.6vh;gap:1.6vh;grid-row:auto}
-  .key{min-height:12.8vh;font-size:4.4vh;border-radius:3vh;padding:.6vh}
-  .tap{font-size:3.9vh;padding:2.8vh 3.9vh;bottom:17vh}
-  .sheet .in{padding:1.7vh 2.2vh 8vh}
-  .sheet header{padding:1.1vh .6vh}.sheet h2{font-size:5.3vh}.close{min-height:11vh;padding:1.1vh 3.9vh;font-size:4.2vh}
-  .sheet .tools{grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:1.6vh;gap:1.6vh;margin:2.2vh 0}
-  .sheet .tools .key{min-height:12.8vh;font-size:3.4vh;line-height:1.15;padding:1.1vh;border-radius:2.8vh}
-  .panel{margin-top:1.6vh;border-radius:3.6vh}
-  summary{font-size:4.4vh;min-height:13vh;padding:3.3vh 3.9vh}
-  .pad{padding:0 3.9vh 3.9vh}
-  .row{padding:2.8vh 0}
-  .row label{font-size:4.2vh}.mute{font-size:3.6vh}
-  input[type=checkbox]{width:7.2vh;height:7.2vh}
-  select,input[type=number]{font-size:4.2vh;min-height:11vh}
+  .info .t{font-size:calc(var(--vh,1vh)*3.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .info .p{font-size:calc(var(--vh,1vh)*2.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gauge{margin-top:.8vh;grid-gap:calc(var(--vh,1vh)*1.5);gap:calc(var(--vh,1vh)*1.5)}
+  #dist{font-size:calc(var(--vh,1vh)*4.6);min-width:0}
+  .segs{height:calc(var(--vh,1vh)*2.6);grid-gap:.6vh;gap:.6vh}
+  .simbadge{font-size:calc(var(--vh,1vh)*2.4);padding:.2vh calc(var(--vh,1vh)*2);top:.5vh}
+  .mainNear{display:block;min-height:0;overflow:hidden;border-radius:calc(var(--vh,1vh)*3.6);border:1px solid #1b3350;background:linear-gradient(180deg,#0a1525,#060c16);padding:.4vh calc(var(--vh,1vh)*2.8)}
+  .mainNear ul.near li{grid-template-columns:calc(var(--vh,1vh)*15) minmax(0,1fr) calc(var(--vh,1vh)*8);gap:calc(var(--vh,1vh)*2.2);padding:calc(var(--vh,1vh)*1) 0}
+  .mainNear .d{font-size:calc(var(--vh,1vh)*4)}
+  .mainNear .pl{font-size:calc(var(--vh,1vh)*3.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mainNear .pl em{font-size:calc(var(--vh,1vh)*2.8)}
+  .mainNear .lim{width:calc(var(--vh,1vh)*7.6);height:calc(var(--vh,1vh)*7.6);border-width:.9vh;font-size:calc(var(--vh,1vh)*3.2)}
+  #msg{min-height:0;font-size:calc(var(--vh,1vh)*3.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .keys{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*1.6);gap:calc(var(--vh,1vh)*1.6);grid-row:auto}
+  .key{min-height:calc(var(--vh,1vh)*12.8);font-size:calc(var(--vh,1vh)*4.4);border-radius:calc(var(--vh,1vh)*3);padding:.6vh}
+  .tap{font-size:calc(var(--vh,1vh)*3.9);padding:calc(var(--vh,1vh)*2.8) calc(var(--vh,1vh)*3.9);bottom:calc(var(--vh,1vh)*17)}
+  .sheet .in{padding:calc(var(--vh,1vh)*1.7) calc(var(--vh,1vh)*2.2) calc(var(--vh,1vh)*8)}
+  .sheet header{padding:calc(var(--vh,1vh)*1.1) .6vh}.sheet h2{font-size:calc(var(--vh,1vh)*5.3)}.close{min-height:calc(var(--vh,1vh)*11);padding:calc(var(--vh,1vh)*1.1) calc(var(--vh,1vh)*3.9);font-size:calc(var(--vh,1vh)*4.2)}
+  .sheet .tools{grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:calc(var(--vh,1vh)*1.6);gap:calc(var(--vh,1vh)*1.6);margin:calc(var(--vh,1vh)*2.2) 0}
+  .sheet .tools .key{min-height:calc(var(--vh,1vh)*12.8);font-size:calc(var(--vh,1vh)*3.4);line-height:1.15;padding:calc(var(--vh,1vh)*1.1);border-radius:calc(var(--vh,1vh)*2.8)}
+  .panel{margin-top:calc(var(--vh,1vh)*1.6);border-radius:calc(var(--vh,1vh)*3.6)}
+  summary{font-size:calc(var(--vh,1vh)*4.4);min-height:calc(var(--vh,1vh)*13);padding:calc(var(--vh,1vh)*3.3) calc(var(--vh,1vh)*3.9)}
+  .pad{padding:0 calc(var(--vh,1vh)*3.9) calc(var(--vh,1vh)*3.9)}
+  .row{padding:calc(var(--vh,1vh)*2.8) 0}
+  .row label{font-size:calc(var(--vh,1vh)*4.2)}.mute{font-size:calc(var(--vh,1vh)*3.6)}
+  input[type=checkbox]{width:calc(var(--vh,1vh)*7.2);height:calc(var(--vh,1vh)*7.2)}
+  select,input[type=number]{font-size:calc(var(--vh,1vh)*4.2);min-height:calc(var(--vh,1vh)*11)}
 }
 
 
@@ -421,7 +421,10 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const APP_VER = 'v16';
+const APP_VER = 'v17';
+/* 실제로 보이는 화면 높이(주소창 제외)를 CSS에 알려줌. 구형 크롬은 100vh에 주소창 높이가 섞여서 아래 버튼이 잘림 */
+function setVH() { try { document.documentElement.style.setProperty('--vh', (window.innerHeight / 100) + 'px'); } catch (e) {} }
+setVH(); window.addEventListener('resize', setVH); window.addEventListener('orientationchange', () => setTimeout(setVH, 300));
 const DEF = { lang: 'ko', mode: 'both', vol: 1.6, awake: true, orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
 try {
@@ -865,7 +868,7 @@ bindSettings(); applyLang(); gauge(null, S.far); setState('stReady'); saveS();
 try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('any').catch(() => {}); } catch (e) {}
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 (async () => {
-  try { const c = await dbGet('cams'); const m = await dbGet('meta'); if (Array.isArray(c) && c.length) { all = c; meta = m || null; applyFilter(); showMeta(); } } catch (e) {}
+  try { const c = await dbGet('cams'); const m = await dbGet('meta'); if (Array.isArray(c) && c.length) { all = c; meta = m || null; applyFilter(); showMeta(); renderNear(lastNear, lastFix && lastFix.lat); } } catch (e) {}
   if (!all.length) { setState('stNeedData'); openSheet(); msg(T('needDataCsv')); return; }
   if (S.auto) { start(); if (!unlocked && S.mode !== 'off') $('tap').hidden = false; }
   else setState('stPressStart');
