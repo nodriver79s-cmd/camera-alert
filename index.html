@@ -152,7 +152,10 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
 @media (min-aspect-ratio:4/5) and (max-aspect-ratio:5/4) and (max-width:1000px){
   html,body{height:100%;overflow:hidden}
   body{font-size:calc(var(--vh,1vh)*4.2)}
-  .app{height:calc(var(--vh,1vh)*100);max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto calc(var(--vh,1vh)*45) minmax(0,1fr) auto;grid-gap:calc(var(--vh,1vh)*1.4);gap:calc(var(--vh,1vh)*1.4);padding:calc(var(--vh,1vh)*1.4)}
+  .app{display:-webkit-box;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;height:calc(var(--vh,1vh)*100);max-width:none;padding:calc(var(--vh,1vh)*1.4)}
+  .app>*,.rail>*{flex:none;margin-bottom:calc(var(--vh,1vh)*1.4)}
+  #msg{flex:1 1 auto !important;max-height:none !important}
+  .keys{margin-bottom:0 !important}
   .rail{display:contents}.status{order:-1;flex-direction:row;align-items:center}
   .rail>div:empty{display:none}
   .status{padding:0 .6vh}
@@ -160,7 +163,7 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   .chips{flex-direction:row}
   .chip{font-size:calc(var(--vh,1vh)*3);padding:.3vh calc(var(--vh,1vh)*1.8)}
   .chips .chip{margin:0 0 0 calc(var(--vh,1vh)*1.2)}
-  .frame{border-radius:calc(var(--vh,1vh)*4.4);min-height:0;padding:.8vh}
+  .frame{height:calc(var(--vh,1vh)*45);border-radius:calc(var(--vh,1vh)*4.4);min-height:0;padding:.8vh}
   .screen{border-radius:calc(var(--vh,1vh)*3.6);padding:calc(var(--vh,1vh)*1.5) calc(var(--vh,1vh)*2.8);align-content:center}
   .dial{display:none}
   .top{grid-template-columns:calc(var(--vh,1vh)*21) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*2);gap:calc(var(--vh,1vh)*2)}
@@ -177,9 +180,10 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   #dist{font-size:calc(var(--vh,1vh)*4.6);min-width:0}
   .segs{height:calc(var(--vh,1vh)*2.6);grid-gap:.6vh;gap:.6vh}
   .simbadge{font-size:calc(var(--vh,1vh)*2.4);padding:.2vh calc(var(--vh,1vh)*2);top:.5vh}
-  #msg{min-height:0;align-self:center;font-size:calc(var(--vh,1vh)*3.6);line-height:1.35;max-height:calc(var(--vh,1vh)*15);overflow:hidden}
+  #msg{min-height:0;display:-webkit-flex;display:flex;align-items:center;justify-content:center;text-align:center;font-size:calc(var(--vh,1vh)*3.6);line-height:1.35;max-height:calc(var(--vh,1vh)*15);overflow:hidden}
   .keys{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*1.6);gap:calc(var(--vh,1vh)*1.6);grid-row:auto}
-  .key{min-height:calc(var(--vh,1vh)*17);font-size:calc(var(--vh,1vh)*5.6);border-radius:calc(var(--vh,1vh)*3);padding:.6vh}
+  .keys{-webkit-align-self:stretch;align-self:stretch;width:100%}
+  .keys .key{height:calc(var(--vh,1vh)*14);min-height:0;font-size:calc(var(--vh,1vh)*5);border-radius:calc(var(--vh,1vh)*3);padding:.6vh}
   .tap{font-size:calc(var(--vh,1vh)*3.9);padding:calc(var(--vh,1vh)*2.8) calc(var(--vh,1vh)*3.9);bottom:calc(var(--vh,1vh)*17)}
   .sheet .in{padding:calc(var(--vh,1vh)*1.7) calc(var(--vh,1vh)*2.2) calc(var(--vh,1vh)*8)}
   .sheet header{padding:calc(var(--vh,1vh)*1.1) .6vh}.sheet h2{font-size:calc(var(--vh,1vh)*5.3)}.close{min-height:calc(var(--vh,1vh)*11);padding:calc(var(--vh,1vh)*1.1) calc(var(--vh,1vh)*3.9);font-size:calc(var(--vh,1vh)*4.2)}
@@ -413,7 +417,7 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const APP_VER = 'v18';
+const APP_VER = 'v19';
 /* 실제로 보이는 화면 높이(주소창 제외)를 CSS에 알려줌. 구형 크롬은 100vh에 주소창 높이가 섞여서 아래 버튼이 잘림 */
 function setVH() { try { document.documentElement.style.setProperty('--vh', (window.innerHeight / 100) + 'px'); } catch (e) {} }
 setVH(); window.addEventListener('resize', setVH); window.addEventListener('orientationchange', () => setTimeout(setVH, 300));
