@@ -543,6 +543,7 @@ function unlock() {
 
 bindSettings(); fillVoices(); applyFilter(); showMeta(); gauge(null, S.far);
 render(0, null, null, false, S.far); $('info').innerHTML = '<div class="t">준비 중</div><div class="p">잠시만 기다려 주세요</div>';
+try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('any').catch(() => {}); } catch (e) {}
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 (async () => {
   try { const c = await dbGet('cams'); const m = await dbGet('meta'); if (Array.isArray(c) && c.length) { all = c; meta = m || null; applyFilter(); showMeta(); } } catch (e) {}
