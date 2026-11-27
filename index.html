@@ -216,6 +216,7 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
 </div>
 
 <button class="tap" id="tap" hidden data-i18n="tapToEnable"></button>
+<div id="copyWarn" hidden style="position:fixed;left:0;right:0;top:0;z-index:30;background:#ff3b30;color:#fff;padding:12px 14px;font-weight:800;font-size:16px;line-height:1.4;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.6)"></div>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle"><div class="in">
   <header><h2><span id="shTitle" data-i18n="settings"></span> <small id="ver" style="font-size:13px;color:#8fa6bf;font-weight:600"></small></h2><button class="close" id="bClose" data-i18n="close"></button></header>
@@ -395,7 +396,7 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const APP_VER = 'v12';
+const APP_VER = 'v13';
 const DEF = { lang: 'ko', mode: 'both', vol: 1.6, awake: true, orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
 try {
@@ -426,6 +427,7 @@ const L = {
     secHelp: '사용 방법 · 데이터 관리',
     helpList: '<li>PC에서 공공데이터포털(data.go.kr)의 <b>전국무인교통단속카메라표준데이터</b>를 <b>CSV</b>로 내려받아 폰으로 옮겨요.</li><li>위의 <b>데이터 불러오기</b>로 CSV를 골라요. 폰에 저장돼서 다음부터는 필요 없어요.</li><li>와이파이에서 이 주소를 한 번 열고 크롬 ⋮ → <b>홈 화면에 추가</b>. 그다음부터는 인터넷 없이 열려요.</li><li>앱을 켜면 자동으로 시작돼요. 처음 위치를 잡을 땐 트인 곳에서 1~몇 분 걸릴 수 있어요.</li><li>한두 달에 한 번 새 CSV로 다시 불러오면 새 카메라가 반영돼요.</li>',
     helpNote: '화면이 켜져 있을 때만 작동해요(시작하면 화면 꺼짐을 막아요). 이동식 카메라는 공공데이터에 없어 안내되지 않아요. 도로 표지판을 우선하세요. 단속구분 코드는 1=과속, 2=신호·과속, 3=신호, 4=주정차로 해석했어요.',
+    copyWarn: '지금 보는 화면은 저장된 사본이라 버튼이 작동하지 않아요. 크롬 주소창에 nodriver79s-cmd.github.io/camera-alert 를 입력해서 열어 주세요.',
     update: '앱 새 버전 받기 (카메라 데이터는 그대로)', updating: '새 버전을 받는 중이에요… 인터넷이 연결돼 있어야 해요.', updateOffline: '인터넷이 연결돼 있지 않아요. 와이파이에 연결한 뒤 다시 눌러 주세요.',
     clear: '저장된 카메라 데이터 지우기', clearSure: '한 번 더 누르면 지워져요', cleared: '저장된 데이터를 지웠어요.',
     dbNone: '데이터 없음', dbCount: '카메라 {n}', dbInfo: '저장된 파일: {f} · {n}개 · 불러온 날짜 {d}', dbInfoNone: '저장된 카메라 데이터가 없어요.',
@@ -459,6 +461,7 @@ const L = {
     secHelp: 'How to use · Data',
     helpList: '<li>On a PC, download the <b>national unmanned traffic camera standard data</b> (전국무인교통단속카메라표준데이터) from data.go.kr as <b>CSV</b> and copy it to the phone.</li><li>Choose the CSV with <b>Load data</b> above. It is saved on the phone, so you only do this once.</li><li>Open this address once on Wi‑Fi, then Chrome ⋮ → <b>Add to Home screen</b>. After that it opens without internet.</li><li>The app starts by itself when opened. The first GPS fix can take a minute or more; stay in the open.</li><li>Load a fresh CSV every month or two to pick up new cameras.</li>',
     helpNote: 'Works only while the screen is on (the app keeps it on). Mobile cameras are not in the public data. Always follow road signs. Camera type codes are read as 1 = speed, 2 = red light + speed, 3 = red light, 4 = parking.',
+    copyWarn: 'This is a saved copy, so the buttons do not work. Type nodriver79s-cmd.github.io/camera-alert into Chrome’s address bar to open the real app.',
     update: 'Get the latest app version (camera data is kept)', updating: 'Downloading the latest version… internet is needed.', updateOffline: 'No internet connection. Connect to Wi‑Fi and try again.',
     clear: 'Delete saved camera data', clearSure: 'Tap again to delete', cleared: 'Saved data deleted.',
     dbNone: 'No data', dbCount: '{n} cameras', dbInfo: 'Saved file: {f} · {n} cameras · loaded {d}', dbInfoNone: 'No camera data saved.',
@@ -492,6 +495,9 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;'
 
 function applyLang() {
   document.documentElement.lang = S.lang; $('ver').textContent = APP_VER;
+  /* 크롬이 저장한 사본(다운로드됨 → 열기)이나 파일로 열린 경우 경고 */
+  const isCopy = !/^https?:$/.test(location.protocol) || (location.protocol === 'http:' && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname));
+  if (isCopy && !/file:.*\/home\/claude\//.test(location.href)) { $('copyWarn').textContent = T('copyWarn'); $('copyWarn').hidden = false; }
   document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = T(el.dataset.i18n); });
   document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = T(el.dataset.i18nHtml); }); // 고정 문구(사전)만 넣음
   $('bStart').textContent = (watchId != null) ? T('stop') : T('start');
