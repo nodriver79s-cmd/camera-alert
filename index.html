@@ -58,6 +58,8 @@ body.alarm #dist{color:#ffb3ad}
 .key.go.on{border-color:#ff7a72;background:linear-gradient(180deg,#ff5a50 0%,#c9241b 60%,#9c1a13 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 18px rgba(255,59,48,.5)}
 .key input{position:absolute;opacity:0;width:1px;height:1px}
 .key:focus-visible,.key:focus-within,input:focus-visible,select:focus-visible,summary:focus-visible,.close:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.simbadge{display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:3;padding:6px 16px;border-radius:999px;background:var(--amber);color:#1a1200;font-weight:800;font-size:16px;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.6)}
+body.sim .simbadge{display:block}
 /* 설정 화면 */
 .sheet{position:fixed;inset:0;z-index:20;background:#03060b;overflow-y:auto;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
 .sheet[hidden]{display:none}
@@ -134,6 +136,7 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
       <g id="ticks" stroke="#9fb3c8" stroke-width="2" stroke-linecap="round"></g>
       <path d="M60 300 A160 160 0 0 1 340 300" fill="none" stroke="#56b8ff" stroke-width="6" stroke-linecap="round" opacity=".55"/>
     </svg>
+    <div class="simbadge" aria-hidden="true">모의 주행 중 · 실제 속도 아님</div>
     <div class="top">
       <div class="sign none" id="sign">—</div>
       <div class="speed"><b id="spd">0</b><span>km/h</span></div>
@@ -433,23 +436,43 @@ function renderNear(list, lat) {
   ul.innerHTML = list.slice(0, 6).map(n => { const c = act[n.i]; return `<li><span class="d">${n.d < 1000 ? Math.round(n.d) + ' m' : (n.d / 1000).toFixed(1) + ' km'}</span><span class="pl">${esc(c[4] || '위치 정보 없음')}<em>${esc(c[5] ? '구간단속' : (TYPES[c[2]] || '기타'))}${c[6] ? ' · 보호구역' : ''}</em></span><span class="lim${c[3] ? '' : ' none'}">${c[3] || '—'}</span></li>`; }).join('');
 }
 
+let spdBuf = [], hist = [];
 function onPos(p) {
   const { latitude: lat, longitude: lon, speed, heading, accuracy } = p.coords, ts = p.timestamp || Date.now();
+  const acc = accuracy == null ? 999 : accuracy, isSim = !!p.sim;
   lastFix = { lat, lon };
-  setGps(`GPS ±${Math.round(accuracy || 0)}m`, accuracy && accuracy > 60 ? 'warn' : 'ok');
-  let spd = (speed != null && !isNaN(speed)) ? speed * 3.6 : null;
-  if (spd == null && prev) { const dt = (ts - prev.ts) / 1000; if (dt > 0.3) spd = dist(prev.lat, prev.lon, lat, lon) / dt * 3.6; }
-  prev = { lat, lon, ts };
-  let hd = (heading != null && !isNaN(heading) && spd != null && spd > 5) ? heading : null;
+  const weak = acc > 50;
+  setGps(isSim ? '모의 주행' : (weak ? `GPS 약함 ±${Math.round(acc)}m` : `GPS ±${Math.round(acc)}m`), isSim ? 'warn' : (weak ? 'warn' : 'ok'));
+  /* 속도: 폰 GPS 칩이 계산한 속도를 우선 사용. 없을 때만 위치 변화로 계산하되,
+     정확도보다 작게 움직인 건 GPS 흔들림으로 보고 0으로 처리 */
+  let raw = (speed != null && !isNaN(speed) && speed >= 0) ? speed * 3.6 : null;
+  hist.push({ lat, lon, ts, acc }); while (hist.length > 6) hist.shift();
+  if (raw == null && hist.length >= 4) {
+    /* GPS 칩 속도가 없을 때만: 3초 이상, 매번 처음 지점에서 점점 멀어지고,
+       이동 거리가 오차의 2.5배를 넘을 때만 '진짜 움직임'으로 인정 */
+    const h = hist.slice(-4), o = h[0], dt = (ts - o.ts) / 1000;
+    let mono = true; for (let k = 1; k < h.length; k++) { if (dist(o.lat, o.lon, h[k].lat, h[k].lon) <= dist(o.lat, o.lon, h[k - 1].lat, h[k - 1].lon)) mono = false; }
+    const dd = dist(o.lat, o.lon, lat, lon), maxAcc = Math.max(...h.map(x => x.acc));
+    raw = (dt >= 2.5 && mono && maxAcc <= 30 && dd > maxAcc * 2.5) ? dd / dt * 3.6 : 0;
+  }
+  if (raw != null && raw > 260) raw = null;
+  prev = { lat, lon, ts, acc };
+  if (raw != null) { spdBuf.push(raw); if (spdBuf.length > 3) spdBuf.shift(); }
+  let spd = spdBuf.length ? spdBuf.slice().sort((a, b) => a - b)[Math.floor(spdBuf.length / 2)] : null; // 최근 3개 중간값
+  if (weak && !isSim) spd = spd == null ? null : Math.min(spd, raw == null ? spd : raw);
+  if (spd != null && spd < 4) spd = 0;
+  /* 진행 방향: 실제로 움직일 때만(시속 8km 이상) 계산 */
+  let hd = (heading != null && !isNaN(heading) && spd != null && spd >= 8) ? heading : null;
   if (!anchor) anchor = { lat, lon };
-  if (dist(anchor.lat, anchor.lon, lat, lon) >= 12) { if (hd == null) hd = bearing(anchor.lat, anchor.lon, lat, lon); anchor = { lat, lon }; }
+  const moved = dist(anchor.lat, anchor.lon, lat, lon);
+  if (moved >= Math.max(15, acc * 1.5)) { if (hd == null && spd != null && spd >= 8) hd = bearing(anchor.lat, anchor.lon, lat, lon); anchor = { lat, lon }; }
   if (hd != null) lastHead = hd;
-  if (spd != null && spd < 3) spd = 0;
+    document.body.classList.toggle('sim', isSim);
   const far = (spd || 0) >= 90 ? Math.max(S.far, 800) : S.far;
   if (!act.length) { render(spd, lat, null, false, far); renderNear([], lat); return; }
   const list = nearby(grid, act, lat, lon, Math.max(far + 200, 1500));
   renderNear(list, lat);
-  const target = (spd != null && spd >= 8) ? pickAhead(list.filter(n => n.d <= far + 200), act, lat, lon, lastHead, S.cone) : null;
+  const target = (spd != null && spd >= 8 && (isSim || acc <= 50)) ? pickAhead(list.filter(n => n.d <= far + 200), act, lat, lon, lastHead, S.cone) : null;
   const now = Date.now(), ev = step(target, far, S.near, now);
   if (target) { const c = act[target.i]; if (ev.includes('near')) { chime(2, 1175); say(phrase('near', c, target.d)); } else if (ev.includes('far')) { chime(1, 988); say(phrase('far', c, target.d)); } }
   const c = target && act[target.i];
@@ -466,7 +489,7 @@ function stopAll() {
   if (watchId != null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
   if (simTimer) { clearInterval(simTimer); simTimer = null; }
   try { if (wake) wake.release(); } catch (e) {}
-  wake = null; prev = null; anchor = null; lastHead = null; step = createEngine();
+  wake = null; prev = null; anchor = null; lastHead = null; spdBuf = []; hist = []; step = createEngine(); document.body.classList.remove('sim');
   $('bStart').textContent = '시작'; $('bStart').classList.remove('on'); $('bSim').textContent = '모의 주행';
   document.body.classList.remove('alarm', 'caution'); setGps('GPS 꺼짐', '');
 }
@@ -493,7 +516,7 @@ function sim() {
   msg(`모의 주행: ${cam[4] || '카메라'} 쪽으로 시속 ${kmh}km로 다가가요`);
   simTimer = setInterval(() => {
     pos = offset(pos[0], pos[1], 0, mps); n++;
-    onPos({ coords: { latitude: pos[0], longitude: pos[1], speed: mps, heading: 0, accuracy: 5 }, timestamp: Date.now() });
+    onPos({ sim: true, coords: { latitude: pos[0], longitude: pos[1], speed: mps, heading: 0, accuracy: 5 }, timestamp: Date.now() });
     if (n * mps > 1050) { stopAll(); msg('모의 주행이 끝났어요.'); }
   }, 1000);
   lockScreen(); $('bSim').textContent = '모의 주행 멈춤'; closeSheet();
