@@ -169,6 +169,8 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
 
   <details class="panel"><summary>시작 설정</summary><div class="pad">
     <div class="row"><label for="sAuto">앱을 켜면 자동으로 시작</label><input type="checkbox" id="sAuto"></div>
+    <div class="row"><label for="sOrient">화면 방향</label><select id="sOrient"><option value="any">자동 회전</option><option value="landscape">가로 고정 (거치대 추천)</option><option value="portrait">세로 고정</option></select></div>
+    <div class="row"><span class="mute" id="orientNote">가로·세로 고정은 홈 화면에 설치한 앱에서 작동해요.</span></div>
     <div class="row"><span class="mute">브라우저 규칙 때문에 소리는 화면을 한 번 눌러야 켜져요. 자동 시작 후 아래에 나오는 파란 안내를 한 번 눌러 주세요.</span></div>
   </div></details>
 
@@ -320,7 +322,7 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const DEF = { auto: true, far: 500, near: 200, tol: 0, cone: 40, voice: true, beep: true, sig: true, park: false, voiceName: '', rate: 1.0, pitch: 1.1 };
+const DEF = { orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, voice: true, beep: true, sig: true, park: false, voiceName: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
 try { Object.assign(S, JSON.parse(localStorage.getItem('camalert.set') || '{}')); } catch (e) {}
 const saveS = () => { try { localStorage.setItem('camalert.set', JSON.stringify(S)); } catch (e) {} };
@@ -523,6 +525,18 @@ $('bClear').addEventListener('click', async () => {
 });
 if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); speechSynthesis.addEventListener('voiceschanged', fillVoices); } catch (e) {} }
 
+/* 화면 방향 */
+function applyOrient() {
+  try {
+    const o = screen.orientation; if (!o) return;
+    if (S.orient === 'any') { if (o.unlock) o.unlock(); $('orientNote').textContent = '폰의 자동 회전이 켜져 있어야 돌아가요.'; return; }
+    o.lock(S.orient === 'landscape' ? 'landscape' : 'portrait').then(() => { $('orientNote').textContent = S.orient === 'landscape' ? '가로로 고정했어요.' : '세로로 고정했어요.'; })
+      .catch(() => { $('orientNote').textContent = '고정은 홈 화면에 설치한 앱에서만 돼요. 폰의 자동 회전을 켜 주세요.'; });
+  } catch (e) {}
+}
+$('sOrient').value = S.orient || 'any';
+$('sOrient').addEventListener('change', e => { S.orient = e.target.value; saveS(); applyOrient(); });
+
 /* 설정 화면 */
 function openSheet() { $('sheet').hidden = false; $('bClose').focus(); }
 function closeSheet() { $('sheet').hidden = true; }
@@ -537,13 +551,12 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('sheet'
 let unlocked = false;
 function unlock() {
   if (unlocked) return; unlocked = true; $('tap').hidden = true;
-  ensureAudio(); if (watchId != null || simTimer) { chime(1, 988); say('안내를 시작할게요.'); }
+  ensureAudio(); applyOrient(); if (watchId != null || simTimer) { chime(1, 988); say('안내를 시작할게요.'); }
 }
 ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, unlock, { capture: true }));
 
-bindSettings(); fillVoices(); applyFilter(); showMeta(); gauge(null, S.far);
+bindSettings(); fillVoices(); applyFilter(); showMeta(); gauge(null, S.far); applyOrient();
 render(0, null, null, false, S.far); $('info').innerHTML = '<div class="t">준비 중</div><div class="p">잠시만 기다려 주세요</div>';
-try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('any').catch(() => {}); } catch (e) {}
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 (async () => {
   try { const c = await dbGet('cams'); const m = await dbGet('meta'); if (Array.isArray(c) && c.length) { all = c; meta = m || null; applyFilter(); showMeta(); } } catch (e) {}
