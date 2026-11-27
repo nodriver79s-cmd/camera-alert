@@ -181,6 +181,8 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
       <option value="off" data-i18n="modeOff"></option>
     </select></div>
     <div class="row"><span class="mute" id="modeNote"></span></div>
+    <div class="row"><label for="sVol" data-i18n="vol"></label><input type="range" id="sVol" min="0.5" max="2.2" step="0.1"></div>
+    <div class="row"><span class="mute" id="volNote"></span></div>
   </div></details>
 
   <details class="panel" id="dNear"><summary data-i18n="secNear"></summary><div class="pad"><ul class="near" id="near"></ul></div></details>
@@ -332,13 +334,14 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const DEF = { lang: 'ko', mode: 'both', orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
+const DEF = { lang: 'ko', mode: 'both', vol: 1.6, orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
 try {
   const old = JSON.parse(localStorage.getItem('camalert.set') || '{}');
   Object.assign(S, old);
   if (!old.mode && ('voice' in old || 'beep' in old)) S.mode = old.voice === false ? (old.beep === false ? 'off' : 'beep') : (old.beep === false ? 'voice' : 'both');
   if (old.voiceName && !old.voice_ko) S.voice_ko = old.voiceName;
+  if (old.vol == null) S.vol = 1.6;
 } catch (e) {}
 const saveS = () => { try { localStorage.setItem('camalert.set', JSON.stringify(S)); } catch (e) {} };
 
@@ -350,6 +353,7 @@ const L = {
     secLang: '언어 · Language', lang: '화면·안내 언어', langNote: '고르면 화면 글자와 음성 안내가 그 언어로 바뀌어요.',
     secMode: '안내 방식', mode: '알림 방법', modeBoth: '음성 안내 + 알림음', modeBeep: '알림음만 (음성 안내 없음)', modeVoice: '음성 안내만', modeOff: '소리 끄기 (화면만)',
     modeNote_both: '카메라가 가까워지면 알림음과 함께 음성으로 알려드려요.', modeNote_beep: '말소리 없이 알림음만 울려요. 500m 앞 1번, 200m 앞 2번, 과속하면 3번 빠르게.', modeNote_voice: '알림음 없이 음성으로만 알려드려요.', modeNote_off: '소리 없이 화면 색과 숫자로만 알려드려요.',
+    vol: '알림음 크기', volNote: '100%가 예전 크기예요. 지금은 {v}%. 음성 안내 목소리는 브라우저 최대값으로 이미 고정돼 있어서, 더 크게 들으려면 폰 미디어 볼륨과 차 볼륨을 올려 주세요.',
     secNear: '가까운 카메라', secStart: '시작 설정', autoStart: '앱을 켜면 자동으로 시작', orient: '화면 방향', orientAny: '자동 회전', orientLand: '가로 고정 (거치대 추천)', orientPort: '세로 고정',
     orientNoteAny: '폰의 자동 회전이 켜져 있어야 돌아가요.', orientNoteLand: '가로로 고정했어요.', orientNotePort: '세로로 고정했어요.', orientNoteFail: '고정은 홈 화면에 설치한 앱에서만 돼요. 폰의 자동 회전을 켜 주세요.',
     soundRule: '브라우저 규칙 때문에 소리는 화면을 한 번 눌러야 켜져요. 자동 시작 후 아래에 나오는 파란 안내를 한 번 눌러 주세요.',
@@ -380,6 +384,7 @@ const L = {
     secLang: 'Language · 언어', lang: 'Screen & voice language', langNote: 'Screen text and voice alerts switch to the selected language.',
     secMode: 'Alert style', mode: 'How to alert', modeBoth: 'Voice + chime', modeBeep: 'Chime only (no voice)', modeVoice: 'Voice only', modeOff: 'Silent (screen only)',
     modeNote_both: 'You hear a chime and a voice message as a camera gets close.', modeNote_beep: 'Chimes only, no speech: 1 at the first alert, 2 at the second, 3 quick ones when speeding.', modeNote_voice: 'Voice messages only, no chimes.', modeNote_off: 'No sound. Colours and numbers on screen only.',
+    vol: 'Chime volume', volNote: '100% is the old level. Now {v}%. The voice is already at the browser maximum, so raise the phone media volume and the car volume to make it louder.',
     secNear: 'Nearby cameras', secStart: 'Startup', autoStart: 'Start automatically when the app opens', orient: 'Screen orientation', orientAny: 'Auto-rotate', orientLand: 'Lock landscape (for a mount)', orientPort: 'Lock portrait',
     orientNoteAny: 'The phone’s auto-rotate must be on.', orientNoteLand: 'Locked to landscape.', orientNotePort: 'Locked to portrait.', orientNoteFail: 'Locking works only in the app installed on the home screen. Turn on auto-rotate.',
     soundRule: 'Browsers block sound until you touch the screen once. After auto-start, tap the blue banner at the bottom.',
@@ -425,7 +430,7 @@ function applyLang() {
   document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = T(el.dataset.i18nHtml); }); // 고정 문구(사전)만 넣음
   $('bStart').textContent = (watchId != null) ? T('stop') : T('start');
   $('bSim').textContent = simTimer ? T('simStop') : T('simulate');
-  $('modeNote').textContent = T('modeNote_' + S.mode);
+  $('modeNote').textContent = T('modeNote_' + S.mode); $('volNote').textContent = T('volNote', { v: Math.round((+S.vol || 1) * 100) });
   applyFilter(); showMeta(); fillVoices(); applyOrient(); setState(uiState); renderNear(lastNear, lastFix && lastFix.lat);
   if (watchId == null && !simTimer) setGps(T('gpsOff'), '');
 }
@@ -501,15 +506,42 @@ function bindSettings() {
   [['sRate', 'rate'], ['sPitch', 'pitch']].forEach(([id, k]) => { const el = $(id); el.value = S[k]; el.addEventListener('change', () => { S[k] = parseFloat(el.value); saveS(); }); });
   $('sVoiceName').addEventListener('change', e => { S[vKey()] = e.target.value; saveS(); fillVoices(); ensureAudio(); say(T('say_hello'), true); });
   $('sLang').value = S.lang; $('sLang').addEventListener('change', e => { S.lang = e.target.value; saveS(); applyLang(); msg(''); ensureAudio(); say(T('say_hello'), true); });
+  $('sVol').value = S.vol; $('sVol').addEventListener('input', e => setVol(parseFloat(e.target.value))); $('sVol').addEventListener('change', () => { ensureAudio(); const m = S.mode; if (!useChime()) S.mode = 'beep'; chime(1, 988); S.mode = m; });
   $('sMode').value = S.mode; $('sMode').addEventListener('change', e => { S.mode = e.target.value; saveS(); $('modeNote').textContent = T('modeNote_' + S.mode); ensureAudio(); testLine(); });
 }
 
 /* 소리 */
-function ensureAudio() { try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {} }
-function chime(n = 1, f = 1046, gap = 0.2) {
-  if (!useChime() || !actx) return;
-  try { for (let k = 0; k < n; k++) { const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + k * gap; o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.6, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); o.start(t); o.stop(t + 0.37); } } catch (e) {}
+let master = null;
+/* 슬라이더 값(예전 크기 대비 배수) → 실제 음량. 측정으로 맞춘 표 */
+const VOL_MAP = [[0.5, 0.27], [0.75, 0.4], [1, 0.55], [1.26, 0.7], [1.43, 0.8], [1.58, 0.9], [1.73, 1.0], [2.01, 1.2], [2.26, 1.4]];
+function volGain(v) { v = Math.max(0.5, Math.min(2.2, +v || 1)); for (let i = 1; i < VOL_MAP.length; i++) { const [x1, y1] = VOL_MAP[i - 1], [x2, y2] = VOL_MAP[i]; if (v <= x2) return y1 + (y2 - y1) * (v - x1) / (x2 - x1); } return 1.3; }
+function ensureAudio() {
+  try {
+    if (!actx) {
+      actx = new (window.AudioContext || window.webkitAudioContext)();
+      /* 크게 키워도 찢어지지 않도록: 음량 → 부드러운 클리퍼 → 스피커 */
+      const ws = actx.createWaveShaper(), N = 2048, cu = new Float32Array(N), K = 1.5;
+      for (let i = 0; i < N; i++) { const x = i / (N - 1) * 2 - 1; cu[i] = Math.tanh(K * x) / Math.tanh(K); }
+      ws.curve = cu; ws.oversample = '4x';
+      master = actx.createGain(); master.gain.value = volGain(S.vol);
+      master.connect(ws); ws.connect(actx.destination);
+    }
+    if (actx.state === 'suspended') actx.resume();
+  } catch (e) {}
 }
+function chime(n = 1, f = 1046, gap = 0.2) {
+  if (!useChime() || !actx || !master) return;
+  try {
+    for (let k = 0; k < n; k++) {
+      const t = actx.currentTime + k * gap, g = actx.createGain();
+      g.connect(master);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.55, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
+      /* 기본음 + 한 옥타브 위 배음: 더 또렷하게 들림 */
+      [[f, 1], [f * 2, 0.3]].forEach(([fq, a]) => { const o = actx.createOscillator(), og = actx.createGain(); o.type = 'sine'; o.frequency.value = fq; og.gain.value = a; o.connect(og); og.connect(g); o.start(t); o.stop(t + 0.44); });
+    }
+  } catch (e) {}
+}
+function setVol(v) { S.vol = v; saveS(); if (master) master.gain.setValueAtTime(volGain(v), actx.currentTime); $('volNote').textContent = T('volNote', { v: Math.round(v * 100) }); }
 async function lockScreen() { try { if ('wakeLock' in navigator && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } catch (e) {} }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && (watchId != null || simTimer)) lockScreen(); });
 
