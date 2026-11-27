@@ -169,7 +169,11 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   #msg{min-height:0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .keys{grid-gap:6px;gap:6px}
   .key{min-height:46px;font-size:16px;border-radius:11px}
-  .tools .key{min-height:52px}
+  .sheet .tools{grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:6px;gap:6px;margin:8px 0}
+  .sheet .tools .key{min-height:44px;font-size:13px;padding:4px;border-radius:10px}
+  .sheet .in{padding:6px 8px 30px}
+  .sheet header{padding:4px 2px}.sheet h2{font-size:19px}.close{min-height:40px;padding:4px 14px;font-size:15px}
+  .panel{margin-top:6px}
   .tap{font-size:14px;padding:10px 14px;bottom:60px}
   summary{font-size:16px;min-height:48px;padding:12px 14px}
   .row label{font-size:15px}
@@ -222,9 +226,13 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   </div>
   <div id="msg2" class="mute" role="status"></div>
 
-  <details class="panel" open><summary data-i18n="secLang"></summary><div class="pad">
-    <div class="row"><label for="sLang" data-i18n="lang"></label><select id="sLang"><option value="ko">한국어</option><option value="en">English</option></select></div>
-    <div class="row"><span class="mute" data-i18n="langNote"></span></div>
+  <details class="panel" open><summary data-i18n="secStart"></summary><div class="pad">
+    <div class="row"><label for="sAuto" data-i18n="autoStart"></label><input type="checkbox" id="sAuto"></div>
+    <div class="row"><label for="sAwake" data-i18n="awake"></label><input type="checkbox" id="sAwake"></div>
+    <div class="row"><span class="mute" id="awakeNote"></span></div>
+    <div class="row"><label for="sOrient" data-i18n="orient"></label><select id="sOrient"><option value="any" data-i18n="orientAny"></option><option value="landscape" data-i18n="orientLand"></option><option value="portrait" data-i18n="orientPort"></option></select></div>
+    <div class="row"><span class="mute" id="orientNote"></span></div>
+    <div class="row"><span class="mute" data-i18n="soundRule"></span></div>
   </div></details>
 
   <details class="panel" open><summary data-i18n="secMode"></summary><div class="pad">
@@ -239,18 +247,14 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
     <div class="row"><span class="mute" id="volNote"></span></div>
   </div></details>
 
-  <details class="panel" id="dNear"><summary data-i18n="secNear"></summary><div class="pad"><ul class="near" id="near"></ul></div></details>
-
-  <details class="panel"><summary data-i18n="secStart"></summary><div class="pad">
-    <div class="row"><label for="sAuto" data-i18n="autoStart"></label><input type="checkbox" id="sAuto"></div>
-    <div class="row"><label for="sAwake" data-i18n="awake"></label><input type="checkbox" id="sAwake"></div>
-    <div class="row"><span class="mute" id="awakeNote"></span></div>
-    <div class="row"><label for="sOrient" data-i18n="orient"></label><select id="sOrient"><option value="any" data-i18n="orientAny"></option><option value="landscape" data-i18n="orientLand"></option><option value="portrait" data-i18n="orientPort"></option></select></div>
-    <div class="row"><span class="mute" id="orientNote"></span></div>
-    <div class="row"><span class="mute" data-i18n="soundRule"></span></div>
+  <details class="panel" open><summary data-i18n="secLang"></summary><div class="pad">
+    <div class="row"><label for="sLang" data-i18n="lang"></label><select id="sLang"><option value="ko">한국어</option><option value="en">English</option></select></div>
+    <div class="row"><span class="mute" data-i18n="langNote"></span></div>
   </div></details>
 
-  <details class="panel"><summary data-i18n="secVoice"></summary><div class="pad">
+  <details class="panel" id="dNear"><summary data-i18n="secNear"></summary><div class="pad"><ul class="near" id="near"></ul></div></details>
+
+          <details class="panel"><summary data-i18n="secVoice"></summary><div class="pad">
     <div class="row"><label for="sVoiceName" data-i18n="voiceName"></label><select id="sVoiceName"></select></div>
     <div class="row"><label for="sRate" data-i18n="rate"></label><input type="range" id="sRate" min="0.7" max="1.4" step="0.05"></div>
     <div class="row"><label for="sPitch" data-i18n="pitch"></label><input type="range" id="sPitch" min="0.8" max="1.4" step="0.05"></div>
@@ -790,7 +794,9 @@ $('sOrient').value = S.orient || 'any';
 $('sOrient').addEventListener('change', e => { S.orient = e.target.value; saveS(); applyOrient(); });
 
 /* 설정 화면 */
-function openSheet() { $('sheet').hidden = false; $('bClose').focus(); }
+function openSheet() { $('sheet').hidden = false; $('sheet').scrollTop = 0; try { $('bClose').focus({ preventScroll: true }); } catch (e) {} }
+/* 작은 화면(Q20 등)에서는 칸을 모두 접어서 제목이 한눈에 보이게 */
+if (window.innerHeight < 600) document.querySelectorAll('#sheet details[open]').forEach(d => d.removeAttribute('open'));
 function closeSheet() { $('sheet').hidden = true; }
 $('bSet').addEventListener('click', openSheet);
 $('bClose').addEventListener('click', closeSheet);
