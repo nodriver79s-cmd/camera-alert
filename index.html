@@ -427,7 +427,7 @@ const L = {
     noGeo: '이 브라우저는 위치 기능을 지원하지 않아요.', insecure: '파일로 열면 위치가 막힐 수 있어요. https 주소로 열어 주세요.', needData: '카메라 데이터가 없어요. 먼저 데이터를 불러와 주세요.', needDataCsv: '먼저 카메라 데이터(CSV)를 불러와 주세요.',
     simStart: '모의 주행: {p} 쪽으로 시속 {k}km로 다가가요', simStopped: '모의 주행을 멈췄어요.', simDone: '모의 주행이 끝났어요.', camera: '카메라',
     testMsg: '소리가 작으면 폰 미디어 볼륨을 올려 주세요.', testMuted: '안내 방식이 "소리 끄기"라 소리가 나지 않아요.',
-    reading: '파일을 읽는 중이에요…', noCams: '카메라 위치를 하나도 찾지 못했어요', saveFail: '폰에 저장하지 못했어요. 이번 사용 중에만 쓸 수 있어요.', loaded: '카메라 {n}개를 불러왔어요{s}.', loadedSkip: ' (위치 없음·중복 {n}개 제외)', loadFail: '불러오기 실패: ',
+    reading: '파일을 읽는 중이에요…', noCams: '카메라 위치를 하나도 찾지 못했어요', saveFail: '폰에 저장하지 못했어요. 이번 사용 중에만 쓸 수 있어요.', loaded: '카메라 {n}개를 불러왔어요{s}.', loadedSkip: ' (위치 없음·중복 {n}개 제외)', loadFail: '불러오기 실패: ', xlsFile: '엑셀(XLS/XLSX) 파일이에요. 공공데이터포털에서 CSV로 다시 내려받아 주세요.', noLatLon: '위도·경도 칸을 찾지 못했어요. 전국무인교통단속카메라표준데이터 CSV가 맞는지 확인해 주세요.', readFail: '파일을 읽지 못했어요. 파일을 폰의 다운로드 폴더로 옮긴 뒤 다시 골라 주세요.',
     nearNeedData: '먼저 카메라 데이터를 불러오세요', nearWait: '위치를 찾으면 표시돼요', nearNone: '1.5km 안에 카메라가 없어요', noPlace: '위치 정보 없음',
     stReady: ['준비 중', '잠시만 기다려 주세요'], stLocating: ['위치를 찾는 중', '트인 곳에서 잠시 기다려 주세요'], stIdle: ['대기 중', '출발하면 앞쪽 카메라를 찾아요'], stClear: ['안전 운전 중', '진행 방향에 가까운 카메라가 없어요'], stNeedData: ['데이터가 필요해요', '설정에서 카메라 데이터를 불러와 주세요'], stPressStart: ['시작을 눌러 주세요', '위치를 찾으면 앞쪽 카메라를 알려드려요'],
     t1: '과속', t2: '신호·과속', t3: '신호', t4: '주정차', tX: '단속', tEtc: '기타', section: '구간단속', camSuffix: ' 카메라', zone: '보호구역',
@@ -459,7 +459,7 @@ const L = {
     noGeo: 'This browser does not support location.', insecure: 'Opened as a file, location may be blocked. Open the https address instead.', needData: 'No camera data yet. Load the data first.', needDataCsv: 'Load the camera data (CSV) first.',
     simStart: 'Simulation: approaching {p} at {k} km/h', simStopped: 'Simulation stopped.', simDone: 'Simulation finished.', camera: 'camera',
     testMsg: 'If it is quiet, turn up the phone’s media volume.', testMuted: 'Alert style is “Silent”, so there is no sound.',
-    reading: 'Reading the file…', noCams: 'No camera locations found', saveFail: 'Could not save on the phone. It works for this session only.', loaded: 'Loaded {n} cameras{s}.', loadedSkip: ' ({n} without location or duplicate skipped)', loadFail: 'Load failed: ',
+    reading: 'Reading the file…', noCams: 'No camera locations found', saveFail: 'Could not save on the phone. It works for this session only.', loaded: 'Loaded {n} cameras{s}.', loadedSkip: ' ({n} without location or duplicate skipped)', loadFail: 'Load failed: ', xlsFile: 'This is an Excel (XLS/XLSX) file. Download the CSV version from data.go.kr instead.', noLatLon: 'Latitude/longitude columns not found. Check that this is the national traffic camera standard data CSV.', readFail: 'Could not read the file. Move it to the phone’s Download folder and pick it again.',
     nearNeedData: 'Load the camera data first', nearWait: 'Shown once your location is found', nearNone: 'No cameras within 1.5 km', noPlace: 'No location name',
     stReady: ['Getting ready', 'One moment please'], stLocating: ['Finding your location', 'Wait a moment somewhere open'], stIdle: ['Standing by', 'Cameras ahead appear once you move'], stClear: ['Drive safely', 'No cameras close ahead'], stNeedData: ['Data needed', 'Load the camera data in Settings'], stPressStart: ['Press Start', 'Cameras ahead appear once your location is found'],
     t1: 'Speed', t2: 'Red light + speed', t3: 'Red light', t4: 'Parking', tX: 'Enforcement', tEtc: 'Other', section: 'Average speed zone', camSuffix: ' camera', zone: 'Protected zone',
@@ -745,11 +745,22 @@ $('bSim').addEventListener('click', sim);
 function testLine() { ensureAudio(); chime(1, 988); setTimeout(() => say(T('say_test')), useChime() ? 350 : 0); }
 $('bTest').addEventListener('click', () => { testLine(); msg(S.mode === 'off' ? T('testMuted') : (useVoice() && !('speechSynthesis' in window) ? T('voiceUnsupported') : T('testMsg'))); });
 $('bVoiceTest').addEventListener('click', () => { ensureAudio(); say(T('say_test'), true); });
+/* 파일 읽기: 최신 브라우저는 file.arrayBuffer(), 구형(크롬 76 미만, Q20)은 FileReader */
+function readFileBuf(f) {
+  if (f.arrayBuffer) return f.arrayBuffer();
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(new Error(T('readFail'))); r.readAsArrayBuffer(f); });
+}
 $('fIn').addEventListener('change', async e => {
   const f = e.target.files && e.target.files[0]; if (!f) return;
   msg(T('reading'));
   try {
-    const { cams, skipped } = parseText(decodeBuf(await f.arrayBuffer()));
+    const buf = await readFileBuf(f);
+    const b = new Uint8Array(buf.slice ? buf.slice(0, 8) : buf);
+    const head = String.fromCharCode.apply(null, Array.prototype.slice.call(new Uint8Array(buf, 0, Math.min(400, buf.byteLength))));
+    if ((b[0] === 0xD0 && b[1] === 0xCF && b[2] === 0x11 && b[3] === 0xE0) || (b[0] === 0x50 && b[1] === 0x4B) || /<table|<html|urn:schemas-microsoft-com:office/i.test(head)) throw new Error(T('xlsFile'));
+    let parsed;
+    try { parsed = parseText(decodeBuf(buf)); } catch (er) { throw new Error(/위도/.test(er.message) ? T('noLatLon') : er.message); }
+    const { cams, skipped } = parsed;
     if (!cams.length) throw new Error(T('noCams'));
     all = cams; meta = { name: f.name, count: cams.length, date: new Date().toLocaleDateString(locale()) };
     try { await dbPut('cams', all); await dbPut('meta', meta); } catch (er) { msg(T('saveFail')); }
