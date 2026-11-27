@@ -52,7 +52,7 @@ body.alarm #dist{color:#ffb3ad}
 @media (prefers-reduced-motion:no-preference){body.alarm .screen{animation:pulse 1s steps(2) infinite}@keyframes pulse{50%{box-shadow:inset 0 0 0 4px transparent,inset 0 0 70px rgba(255,59,48,.2)}}}
 #msg{min-height:26px;color:var(--amber);font-size:17px;font-weight:600;text-align:center}
 .keys{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px}
-.key{position:relative;font:inherit;font-size:20px;font-weight:700;min-height:72px;padding:8px 6px;border-radius:14px;cursor:pointer;color:#eaf3ff;border:1px solid #2d5785;background:linear-gradient(180deg,#1a3553 0%,#0d1d31 55%,#091524 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 6px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.6);display:grid;place-items:center;text-align:center;line-height:1.2}
+.key{word-break:keep-all;position:relative;font:inherit;font-size:20px;font-weight:700;min-height:72px;padding:8px 6px;border-radius:14px;cursor:pointer;color:#eaf3ff;border:1px solid #2d5785;background:linear-gradient(180deg,#1a3553 0%,#0d1d31 55%,#091524 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 6px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.6);display:grid;place-items:center;text-align:center;line-height:1.2}
 .key:active{transform:translateY(1px);box-shadow:inset 0 0 14px rgba(86,184,255,.5)}
 .key.go{border-color:#5fb8ff;background:linear-gradient(180deg,#3d9bff 0%,#1d64c4 60%,#154c97 100%);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 18px rgba(86,184,255,.45),0 3px 8px rgba(0,0,0,.6)}
 .key.go.on{border-color:#ff7a72;background:linear-gradient(180deg,#ff5a50 0%,#c9241b 60%,#9c1a13 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 18px rgba(255,59,48,.5)}
@@ -67,8 +67,8 @@ body.sim .simbadge{display:block}
 .sheet header{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:10px 2px;background:linear-gradient(#03060b,rgba(3,6,11,.9));border-bottom:1px solid #12263d}
 .sheet h2{margin:0;font-size:24px}
 .close{font:inherit;font-size:18px;font-weight:700;min-height:52px;padding:6px 20px;border-radius:12px;border:1px solid #5fb8ff;background:linear-gradient(180deg,#3d9bff,#1d64c4);color:#fff;cursor:pointer}
-.tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
-.panel{margin-top:12px;border-radius:16px;border:1px solid #1b3350;background:linear-gradient(180deg,#0a1525,#060c16)}
+.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.panel{scroll-margin-top:70px;margin-top:12px;border-radius:16px;border:1px solid #1b3350;background:linear-gradient(180deg,#0a1525,#060c16)}
 summary{cursor:pointer;padding:16px 18px;font-weight:700;font-size:19px;min-height:56px;color:#dbe9fa;list-style:none;display:flex;justify-content:space-between;align-items:center}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"›";font-size:28px;color:var(--blue);transition:transform .2s}
@@ -118,7 +118,7 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   #msg{font-size:14px;text-align:center;align-self:center;overflow:hidden}
   .keys{grid-template-columns:minmax(0,1fr);grid-row:4/6;align-self:end}
   .key{min-height:min(20vh,96px);font-size:min(2.6vw,5.4vh,22px)}
-  .tools{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tools{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media (orientation:portrait),(max-width:559px){.rail{display:contents}.status{order:-1}}
 /* ===== 구형 크롬(68 등) 대체 스타일: min()/clamp()/aspect-ratio/flex gap을 모르는 브라우저용 ===== */
@@ -169,8 +169,8 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   #msg{min-height:0;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .keys{grid-gap:6px;gap:6px}
   .key{min-height:46px;font-size:16px;border-radius:11px}
-  .sheet .tools{grid-template-columns:repeat(3,minmax(0,1fr));grid-gap:6px;gap:6px;margin:8px 0}
-  .sheet .tools .key{min-height:44px;font-size:13px;padding:4px;border-radius:10px}
+  .sheet .tools{grid-template-columns:repeat(4,minmax(0,1fr));grid-gap:6px;gap:6px;margin:8px 0}
+  .sheet .tools .key{min-height:46px;font-size:12px;line-height:1.15;padding:4px;border-radius:10px}
   .sheet .in{padding:6px 8px 30px}
   .sheet header{padding:4px 2px}.sheet h2{font-size:19px}.close{min-height:40px;padding:4px 14px;font-size:15px}
   .panel{margin-top:6px}
@@ -179,7 +179,7 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   .row label{font-size:15px}
 }
 
-@media(max-width:430px){.tools{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:430px){.tools{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -224,10 +224,11 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
     <label class="key" id="lFile"><span data-i18n="loadData"></span><input type="file" id="fIn" accept=".csv,.json,text/csv,application/json"></label>
     <button class="key" id="bTest" data-i18n="soundTest"></button>
     <button class="key" id="bSim" data-i18n="simulate"></button>
+    <button class="key" id="bStartSet" data-i18n="secStart"></button>
   </div>
   <div id="msg2" class="mute" role="status"></div>
 
-  <details class="panel" open><summary data-i18n="secStart"></summary><div class="pad">
+  <details class="panel" id="dStart" open><summary data-i18n="secStart"></summary><div class="pad">
     <div class="row"><label for="sAuto" data-i18n="autoStart"></label><input type="checkbox" id="sAuto"></div>
     <div class="row"><label for="sAwake" data-i18n="awake"></label><input type="checkbox" id="sAwake"></div>
     <div class="row"><span class="mute" id="awakeNote"></span></div>
@@ -396,7 +397,7 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const APP_VER = 'v13';
+const APP_VER = 'v14';
 const DEF = { lang: 'ko', mode: 'both', vol: 1.6, awake: true, orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
 try {
@@ -817,6 +818,8 @@ function openSheet() { $('sheet').hidden = false; $('sheet').scrollTop = 0; try 
 if (window.innerHeight < 600) document.querySelectorAll('#sheet details[open]').forEach(d => d.removeAttribute('open'));
 function closeSheet() { $('sheet').hidden = true; }
 $('bSet').addEventListener('click', openSheet);
+/* 시작 설정 바로 가기 버튼: 칸을 펼치고 그 위치로 이동 */
+$('bStartSet').addEventListener('click', () => { const d = $('dStart'), sh = $('sheet'); d.open = true; const hd = sh.querySelector('header'); sh.scrollTop += d.getBoundingClientRect().top - (hd ? hd.getBoundingClientRect().bottom : 0) - 8; });
 $('bClose').addEventListener('click', closeSheet);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('sheet').hidden) closeSheet(); });
 
