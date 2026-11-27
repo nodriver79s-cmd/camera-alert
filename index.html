@@ -34,7 +34,6 @@ body{background:radial-gradient(120% 70% at 50% -10%,#10304f 0%,#061020 45%,#030
 .speed b{display:block;font-size:clamp(92px,27vw,168px);line-height:.92;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-5px;color:#fff;text-shadow:0 0 22px rgba(86,184,255,.35)}
 .speed span{display:block;margin-top:4px;color:var(--blue);font-size:20px;font-weight:700;letter-spacing:.06em}
 .side{grid-column:1/-1}
-.mainNear{display:none}
 .info{margin-top:12px;padding-top:12px;border-top:1px solid #142a44;text-align:center;min-height:62px}
 .info .t{font-size:clamp(22px,5.6vw,30px);font-weight:800;color:#fff}
 .info .p{font-size:18px;color:var(--mute);overflow-wrap:anywhere}
@@ -52,7 +51,7 @@ body.alarm .speed b{color:#ffd9d6;text-shadow:0 0 26px rgba(255,59,48,.9)}
 body.alarm #dist{color:#ffb3ad}
 @media (prefers-reduced-motion:no-preference){body.alarm .screen{animation:pulse 1s steps(2) infinite}@keyframes pulse{50%{box-shadow:inset 0 0 0 4px transparent,inset 0 0 70px rgba(255,59,48,.2)}}}
 #msg{min-height:26px;color:var(--amber);font-size:17px;font-weight:600;text-align:center}
-.keys{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:10px}
+.keys{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:10px}
 .key{word-break:keep-all;position:relative;font:inherit;font-size:20px;font-weight:700;min-height:72px;padding:8px 6px;border-radius:14px;cursor:pointer;color:#eaf3ff;border:1px solid #2d5785;background:linear-gradient(180deg,#1a3553 0%,#0d1d31 55%,#091524 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -2px 6px rgba(0,0,0,.5),0 3px 8px rgba(0,0,0,.6);display:grid;place-items:center;text-align:center;line-height:1.2}
 .key:active{transform:translateY(1px);box-shadow:inset 0 0 14px rgba(86,184,255,.5)}
 .key.go{border-color:#5fb8ff;background:linear-gradient(180deg,#3d9bff 0%,#1d64c4 60%,#154c97 100%);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 0 18px rgba(86,184,255,.45),0 3px 8px rgba(0,0,0,.6)}
@@ -149,11 +148,11 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   }
 }
 /* ===== 정사각형 화면 (블랙베리 Q20 등) — 높이는 실제 보이는 높이(--vh, 주소창 제외) 기준.: 화면 높이(vh)에 맞춰 모두 한 화면에.
-   속도 표시창은 원래 높이(약 calc(var(--vh,1vh)*68))의 2/3인 calc(var(--vh,1vh)*45), 남는 공간엔 가까운 카메라 목록 ===== */
+   속도 표시창은 원래 높이(약 calc(var(--vh,1vh)*68))의 2/3인 calc(var(--vh,1vh)*45), 남는 공간은 안내 문구와 큰 버튼 ===== */
 @media (min-aspect-ratio:4/5) and (max-aspect-ratio:5/4) and (max-width:1000px){
   html,body{height:100%;overflow:hidden}
   body{font-size:calc(var(--vh,1vh)*4.2)}
-  .app{height:calc(var(--vh,1vh)*100);max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto calc(var(--vh,1vh)*45) minmax(0,1fr) auto auto;grid-gap:calc(var(--vh,1vh)*1.4);gap:calc(var(--vh,1vh)*1.4);padding:calc(var(--vh,1vh)*1.4)}
+  .app{height:calc(var(--vh,1vh)*100);max-width:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto calc(var(--vh,1vh)*45) minmax(0,1fr) auto;grid-gap:calc(var(--vh,1vh)*1.4);gap:calc(var(--vh,1vh)*1.4);padding:calc(var(--vh,1vh)*1.4)}
   .rail{display:contents}.status{order:-1;flex-direction:row;align-items:center}
   .rail>div:empty{display:none}
   .status{padding:0 .6vh}
@@ -178,14 +177,9 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
   #dist{font-size:calc(var(--vh,1vh)*4.6);min-width:0}
   .segs{height:calc(var(--vh,1vh)*2.6);grid-gap:.6vh;gap:.6vh}
   .simbadge{font-size:calc(var(--vh,1vh)*2.4);padding:.2vh calc(var(--vh,1vh)*2);top:.5vh}
-  .mainNear{display:block;min-height:0;overflow:hidden;border-radius:calc(var(--vh,1vh)*3.6);border:1px solid #1b3350;background:linear-gradient(180deg,#0a1525,#060c16);padding:.4vh calc(var(--vh,1vh)*2.8)}
-  .mainNear ul.near li{grid-template-columns:calc(var(--vh,1vh)*15) minmax(0,1fr) calc(var(--vh,1vh)*8);gap:calc(var(--vh,1vh)*2.2);padding:calc(var(--vh,1vh)*1) 0}
-  .mainNear .d{font-size:calc(var(--vh,1vh)*4)}
-  .mainNear .pl{font-size:calc(var(--vh,1vh)*3.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mainNear .pl em{font-size:calc(var(--vh,1vh)*2.8)}
-  .mainNear .lim{width:calc(var(--vh,1vh)*7.6);height:calc(var(--vh,1vh)*7.6);border-width:.9vh;font-size:calc(var(--vh,1vh)*3.2)}
-  #msg{min-height:0;font-size:calc(var(--vh,1vh)*3.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .keys{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*1.6);gap:calc(var(--vh,1vh)*1.6);grid-row:auto}
-  .key{min-height:calc(var(--vh,1vh)*12.8);font-size:calc(var(--vh,1vh)*4.4);border-radius:calc(var(--vh,1vh)*3);padding:.6vh}
+  #msg{min-height:0;align-self:center;font-size:calc(var(--vh,1vh)*3.6);line-height:1.35;max-height:calc(var(--vh,1vh)*15);overflow:hidden}
+  .keys{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);grid-gap:calc(var(--vh,1vh)*1.6);gap:calc(var(--vh,1vh)*1.6);grid-row:auto}
+  .key{min-height:calc(var(--vh,1vh)*17);font-size:calc(var(--vh,1vh)*5.6);border-radius:calc(var(--vh,1vh)*3);padding:.6vh}
   .tap{font-size:calc(var(--vh,1vh)*3.9);padding:calc(var(--vh,1vh)*2.8) calc(var(--vh,1vh)*3.9);bottom:calc(var(--vh,1vh)*17)}
   .sheet .in{padding:calc(var(--vh,1vh)*1.7) calc(var(--vh,1vh)*2.2) calc(var(--vh,1vh)*8)}
   .sheet header{padding:calc(var(--vh,1vh)*1.1) .6vh}.sheet h2{font-size:calc(var(--vh,1vh)*5.3)}.close{min-height:calc(var(--vh,1vh)*11);padding:calc(var(--vh,1vh)*1.1) calc(var(--vh,1vh)*3.9);font-size:calc(var(--vh,1vh)*4.2)}
@@ -226,7 +220,6 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
       </div>
     </div>
   </section></div>
-  <div class="mainNear" id="mainNear"><ul class="near" id="near2"></ul></div>
   <div class="rail">
     <div class="status"><div id="clock">--:--</div><div class="chips"><span class="chip" id="cDb"></span><span class="chip" id="cGps"></span><span class="chip" id="cVer"></span></div></div>
     <div id="msg" role="status"></div>
@@ -234,7 +227,6 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
     <div class="keys">
       <button class="key go" id="bStart" data-i18n="start"></button>
       <button class="key" id="bSet" data-i18n="settings"></button>
-      <button class="key" id="bStartSet2" data-i18n="secStart"></button>
     </div>
   </div>
 </div>
@@ -421,7 +413,7 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const APP_VER = 'v17';
+const APP_VER = 'v18';
 /* 실제로 보이는 화면 높이(주소창 제외)를 CSS에 알려줌. 구형 크롬은 100vh에 주소창 높이가 섞여서 아래 버튼이 잘림 */
 function setVH() { try { document.documentElement.style.setProperty('--vh', (window.innerHeight / 100) + 'px'); } catch (e) {} }
 setVH(); window.addEventListener('resize', setVH); window.addEventListener('orientationchange', () => setTimeout(setVH, 300));
@@ -689,7 +681,7 @@ function render(speed, lat, target, over, far) {
 let lastNear = [];
 function renderNear(list, lat) {
   lastNear = list || [];
-  const ul = { set innerHTML(h) { $('near').innerHTML = h; $('near2').innerHTML = h; } }, line = t => `<li><span class="d">—</span><span class="pl">${esc(t)}</span><span></span></li>`;
+  const ul = $('near'), line = t => `<li><span class="d">—</span><span class="pl">${esc(t)}</span><span></span></li>`;
   if (!act.length) { ul.innerHTML = line(T('nearNeedData')); return; }
   if (lat == null) { ul.innerHTML = line(T('nearWait')); return; }
   if (!lastNear.length) { ul.innerHTML = line(T('nearNone')); return; }
@@ -849,7 +841,6 @@ $('bSet').addEventListener('click', openSheet);
 /* 시작 설정 바로 가기 버튼: 칸을 펼치고 그 위치로 이동 */
 function goStartSettings() { const d = $('dStart'), sh = $('sheet'); d.open = true; const hd = sh.querySelector('header'); sh.scrollTop += d.getBoundingClientRect().top - (hd ? hd.getBoundingClientRect().bottom : 0) - 8; }
 $('bStartSet').addEventListener('click', goStartSettings);
-$('bStartSet2').addEventListener('click', () => { openSheet(); setTimeout(goStartSettings, 30); });
 $('bClose').addEventListener('click', closeSheet);
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('sheet').hidden) closeSheet(); });
 
