@@ -132,81 +132,88 @@ ol{padding-left:1.3em;margin:6px 0}ol li{margin:6px 0}
       <circle cx="200" cy="200" r="190" fill="none" stroke="url(#ch)" stroke-width="3"/>
       <circle cx="200" cy="200" r="168" fill="none" stroke="url(#ch)" stroke-width="1.2"/>
       <circle cx="200" cy="200" r="112" fill="none" stroke="#56b8ff" stroke-width="1" stroke-dasharray="2 6"/>
-      <g stroke="url(#ch)" stroke-linecap="round"><g id="tk"><line x1="200" y1="14" x2="200" y2="40" stroke-width="4"/></g></g>
+      <line x1="200" y1="14" x2="200" y2="40" stroke="url(#ch)" stroke-width="4" stroke-linecap="round"/>
       <g id="ticks" stroke="#9fb3c8" stroke-width="2" stroke-linecap="round"></g>
       <path d="M60 300 A160 160 0 0 1 340 300" fill="none" stroke="#56b8ff" stroke-width="6" stroke-linecap="round" opacity=".55"/>
     </svg>
-    <div class="simbadge" aria-hidden="true">모의 주행 중 · 실제 속도 아님</div>
+    <div class="simbadge" aria-hidden="true" data-i18n="simBadge"></div>
     <div class="top">
       <div class="sign none" id="sign">—</div>
       <div class="speed"><b id="spd">0</b><span>km/h</span></div>
       <div class="side">
-        <div class="info" id="info"><div class="t">준비 중</div><div class="p">잠시만 기다려 주세요</div></div>
+        <div class="info" id="info"><div class="t"></div><div class="p"></div></div>
         <div class="gauge"><div id="dist">— m</div><div class="segs" id="segs"></div></div>
       </div>
     </div>
   </section></div>
   <div class="rail">
-    <div class="status"><div id="clock">--:--</div><div class="chips"><span class="chip" id="cDb">데이터 없음</span><span class="chip" id="cGps">GPS 꺼짐</span></div></div>
+    <div class="status"><div id="clock">--:--</div><div class="chips"><span class="chip" id="cDb"></span><span class="chip" id="cGps"></span></div></div>
     <div id="msg" role="status"></div>
     <div></div>
     <div class="keys">
-      <button class="key go" id="bStart">시작</button>
-      <button class="key" id="bSet">설정</button>
+      <button class="key go" id="bStart" data-i18n="start"></button>
+      <button class="key" id="bSet" data-i18n="settings"></button>
     </div>
   </div>
 </div>
 
-<button class="tap" id="tap" hidden>화면을 한 번 눌러 주세요 · 음성 안내 켜기</button>
+<button class="tap" id="tap" hidden data-i18n="tapToEnable"></button>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle"><div class="in">
-  <header><h2 id="shTitle">설정</h2><button class="close" id="bClose">닫기</button></header>
+  <header><h2 id="shTitle" data-i18n="settings"></h2><button class="close" id="bClose" data-i18n="close"></button></header>
   <div class="tools">
-    <label class="key" id="lFile">데이터 불러오기<input type="file" id="fIn" accept=".csv,.json,text/csv,application/json"></label>
-    <button class="key" id="bTest">음성 테스트</button>
-    <button class="key" id="bSim">모의 주행</button>
+    <label class="key" id="lFile"><span data-i18n="loadData"></span><input type="file" id="fIn" accept=".csv,.json,text/csv,application/json"></label>
+    <button class="key" id="bTest" data-i18n="soundTest"></button>
+    <button class="key" id="bSim" data-i18n="simulate"></button>
   </div>
   <div id="msg2" class="mute" role="status"></div>
 
-  <details class="panel" id="dNear"><summary>가까운 카메라</summary><div class="pad"><ul class="near" id="near"><li><span class="d">—</span><span class="pl">위치를 찾으면 표시돼요</span><span></span></li></ul></div></details>
-
-  <details class="panel"><summary>시작 설정</summary><div class="pad">
-    <div class="row"><label for="sAuto">앱을 켜면 자동으로 시작</label><input type="checkbox" id="sAuto"></div>
-    <div class="row"><label for="sOrient">화면 방향</label><select id="sOrient"><option value="any">자동 회전</option><option value="landscape">가로 고정 (거치대 추천)</option><option value="portrait">세로 고정</option></select></div>
-    <div class="row"><span class="mute" id="orientNote">가로·세로 고정은 홈 화면에 설치한 앱에서 작동해요.</span></div>
-    <div class="row"><span class="mute">브라우저 규칙 때문에 소리는 화면을 한 번 눌러야 켜져요. 자동 시작 후 아래에 나오는 파란 안내를 한 번 눌러 주세요.</span></div>
+  <details class="panel" open><summary data-i18n="secLang"></summary><div class="pad">
+    <div class="row"><label for="sLang" data-i18n="lang"></label><select id="sLang"><option value="ko">한국어</option><option value="en">English</option></select></div>
+    <div class="row"><span class="mute" data-i18n="langNote"></span></div>
   </div></details>
 
-  <details class="panel"><summary>음성 설정</summary><div class="pad">
-    <div class="row"><label for="sVoiceName">목소리</label><select id="sVoiceName"></select></div>
-    <div class="row"><label for="sRate">말하기 속도</label><input type="range" id="sRate" min="0.7" max="1.4" step="0.05"></div>
-    <div class="row"><label for="sPitch">목소리 높낮이</label><input type="range" id="sPitch" min="0.8" max="1.4" step="0.05"></div>
-    <div class="row"><label for="sVoice">음성 안내</label><input type="checkbox" id="sVoice"></div>
-    <div class="row"><label for="sBeep">경고음</label><input type="checkbox" id="sBeep"></div>
-    <div class="row"><button class="btn2" id="bVoiceTest">이 목소리로 들어보기</button><span class="mute" id="voiceNote"></span></div>
+  <details class="panel" open><summary data-i18n="secMode"></summary><div class="pad">
+    <div class="row"><label for="sMode" data-i18n="mode"></label><select id="sMode">
+      <option value="both" data-i18n="modeBoth"></option>
+      <option value="beep" data-i18n="modeBeep"></option>
+      <option value="voice" data-i18n="modeVoice"></option>
+      <option value="off" data-i18n="modeOff"></option>
+    </select></div>
+    <div class="row"><span class="mute" id="modeNote"></span></div>
   </div></details>
 
-  <details class="panel"><summary>경보 설정</summary><div class="pad">
-    <div class="row"><label for="sFar">1차 안내 거리 (m)</label><input type="number" id="sFar" min="200" max="1500" step="50"></div>
-    <div class="row"><label for="sNear">2차 안내 거리 (m)</label><input type="number" id="sNear" min="50" max="600" step="10"></div>
-    <div class="row"><label for="sTol">과속 허용 (km/h)</label><input type="number" id="sTol" min="0" max="20" step="1"></div>
-    <div class="row"><label for="sCone">진행 방향 인식 각도 (±도)</label><input type="number" id="sCone" min="15" max="90" step="5"></div>
-    <div class="row"><label for="sSig">신호위반 카메라 포함</label><input type="checkbox" id="sSig"></div>
-    <div class="row"><label for="sPark">주정차 단속 카메라 포함</label><input type="checkbox" id="sPark"></div>
-    <div class="row"><span class="mute">시속 90km 이상이면 1차 안내를 자동으로 800m 앞에서 해요.</span></div>
+  <details class="panel" id="dNear"><summary data-i18n="secNear"></summary><div class="pad"><ul class="near" id="near"></ul></div></details>
+
+  <details class="panel"><summary data-i18n="secStart"></summary><div class="pad">
+    <div class="row"><label for="sAuto" data-i18n="autoStart"></label><input type="checkbox" id="sAuto"></div>
+    <div class="row"><label for="sOrient" data-i18n="orient"></label><select id="sOrient"><option value="any" data-i18n="orientAny"></option><option value="landscape" data-i18n="orientLand"></option><option value="portrait" data-i18n="orientPort"></option></select></div>
+    <div class="row"><span class="mute" id="orientNote"></span></div>
+    <div class="row"><span class="mute" data-i18n="soundRule"></span></div>
   </div></details>
 
-  <details class="panel"><summary>사용 방법 · 데이터 관리</summary><div class="pad">
-    <ol>
-      <li>PC에서 공공데이터포털(data.go.kr)의 <b>전국무인교통단속카메라표준데이터</b>를 <b>CSV</b>로 내려받아 폰으로 옮겨요.</li>
-      <li>위의 <b>데이터 불러오기</b>로 CSV를 골라요. 폰에 저장돼서 다음부터는 필요 없어요.</li>
-      <li>와이파이에서 이 주소를 한 번 열고 크롬 ⋮ → <b>홈 화면에 추가</b>. 그다음부터는 인터넷 없이 열려요.</li>
-      <li>앱을 켜면 자동으로 시작돼요. 처음 위치를 잡을 땐 트인 곳에서 1~몇 분 걸릴 수 있어요.</li>
-      <li>한두 달에 한 번 새 CSV로 다시 불러오면 새 카메라가 반영돼요.</li>
-    </ol>
-    <p class="mute">화면이 켜져 있을 때만 작동해요(시작하면 화면 꺼짐을 막아요). 이동식 카메라는 공공데이터에 없어 안내되지 않아요. 도로 표지판을 우선하세요. 단속구분 코드는 1=과속, 2=신호·과속, 3=신호, 4=주정차로 해석했어요.</p>
+  <details class="panel"><summary data-i18n="secVoice"></summary><div class="pad">
+    <div class="row"><label for="sVoiceName" data-i18n="voiceName"></label><select id="sVoiceName"></select></div>
+    <div class="row"><label for="sRate" data-i18n="rate"></label><input type="range" id="sRate" min="0.7" max="1.4" step="0.05"></div>
+    <div class="row"><label for="sPitch" data-i18n="pitch"></label><input type="range" id="sPitch" min="0.8" max="1.4" step="0.05"></div>
+    <div class="row"><button class="btn2" id="bVoiceTest" data-i18n="voiceTest"></button><span class="mute" id="voiceNote"></span></div>
+  </div></details>
+
+  <details class="panel"><summary data-i18n="secAlert"></summary><div class="pad">
+    <div class="row"><label for="sFar" data-i18n="far"></label><input type="number" id="sFar" min="200" max="1500" step="50"></div>
+    <div class="row"><label for="sNear" data-i18n="near"></label><input type="number" id="sNear" min="50" max="600" step="10"></div>
+    <div class="row"><label for="sTol" data-i18n="tol"></label><input type="number" id="sTol" min="0" max="20" step="1"></div>
+    <div class="row"><label for="sCone" data-i18n="cone"></label><input type="number" id="sCone" min="15" max="90" step="5"></div>
+    <div class="row"><label for="sSig" data-i18n="incSig"></label><input type="checkbox" id="sSig"></div>
+    <div class="row"><label for="sPark" data-i18n="incPark"></label><input type="checkbox" id="sPark"></div>
+    <div class="row"><span class="mute" data-i18n="hwNote"></span></div>
+  </div></details>
+
+  <details class="panel"><summary data-i18n="secHelp"></summary><div class="pad">
+    <ol data-i18n-html="helpList"></ol>
+    <p class="mute" data-i18n="helpNote"></p>
     <p class="mute" id="dbInfo"></p>
-    <button class="btn2" id="bClear" style="width:100%">저장된 카메라 데이터 지우기</button>
+    <button class="btn2" id="bClear" style="width:100%" data-i18n="clear"></button>
   </div></details>
 </div></div>
 <script>
@@ -325,17 +332,103 @@ function phrase(kind, c, d) {
 }
 // CORE-END
 const $ = id => document.getElementById(id);
-const DEF = { orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, voice: true, beep: true, sig: true, park: false, voiceName: '', rate: 1.0, pitch: 1.1 };
+const DEF = { lang: 'ko', mode: 'both', orient: 'any', auto: true, far: 500, near: 200, tol: 0, cone: 40, sig: true, park: false, voice_ko: '', voice_en: '', rate: 1.0, pitch: 1.1 };
 let S = { ...DEF };
-try { Object.assign(S, JSON.parse(localStorage.getItem('camalert.set') || '{}')); } catch (e) {}
+try {
+  const old = JSON.parse(localStorage.getItem('camalert.set') || '{}');
+  Object.assign(S, old);
+  if (!old.mode && ('voice' in old || 'beep' in old)) S.mode = old.voice === false ? (old.beep === false ? 'off' : 'beep') : (old.beep === false ? 'voice' : 'both');
+  if (old.voiceName && !old.voice_ko) S.voice_ko = old.voiceName;
+} catch (e) {}
 const saveS = () => { try { localStorage.setItem('camalert.set', JSON.stringify(S)); } catch (e) {} };
+
+/* ===== 언어 사전 ===== */
+const L = {
+  ko: {
+    simBadge: '모의 주행 중 · 실제 속도 아님', start: '시작', stop: '정지', settings: '설정', close: '닫기',
+    tapToEnable: '화면을 한 번 눌러 주세요 · 알림 켜기', loadData: '데이터 불러오기', soundTest: '소리 테스트', simulate: '모의 주행', simStop: '모의 주행 멈춤',
+    secLang: '언어 · Language', lang: '화면·안내 언어', langNote: '고르면 화면 글자와 음성 안내가 그 언어로 바뀌어요.',
+    secMode: '안내 방식', mode: '알림 방법', modeBoth: '음성 안내 + 알림음', modeBeep: '알림음만 (음성 안내 없음)', modeVoice: '음성 안내만', modeOff: '소리 끄기 (화면만)',
+    modeNote_both: '카메라가 가까워지면 알림음과 함께 음성으로 알려드려요.', modeNote_beep: '말소리 없이 알림음만 울려요. 500m 앞 1번, 200m 앞 2번, 과속하면 3번 빠르게.', modeNote_voice: '알림음 없이 음성으로만 알려드려요.', modeNote_off: '소리 없이 화면 색과 숫자로만 알려드려요.',
+    secNear: '가까운 카메라', secStart: '시작 설정', autoStart: '앱을 켜면 자동으로 시작', orient: '화면 방향', orientAny: '자동 회전', orientLand: '가로 고정 (거치대 추천)', orientPort: '세로 고정',
+    orientNoteAny: '폰의 자동 회전이 켜져 있어야 돌아가요.', orientNoteLand: '가로로 고정했어요.', orientNotePort: '세로로 고정했어요.', orientNoteFail: '고정은 홈 화면에 설치한 앱에서만 돼요. 폰의 자동 회전을 켜 주세요.',
+    soundRule: '브라우저 규칙 때문에 소리는 화면을 한 번 눌러야 켜져요. 자동 시작 후 아래에 나오는 파란 안내를 한 번 눌러 주세요.',
+    secVoice: '음성 설정', voiceName: '목소리', rate: '말하기 속도', pitch: '목소리 높낮이', voiceTest: '이 목소리로 들어보기',
+    voiceAuto: '자동 (부드러운 여성 목소리 우선)', voiceNet: ' (인터넷 필요)', voiceNow: '지금 목소리: {v}', voiceNone: '한국어 음성이 없어요. 폰 설정 → 접근성 → 텍스트 음성 변환에서 한국어 음성 데이터를 설치해 주세요.', voiceUnsupported: '이 브라우저는 음성 안내를 지원하지 않아요.',
+    secAlert: '경보 설정', far: '1차 안내 거리 (m)', near: '2차 안내 거리 (m)', tol: '과속 허용 (km/h)', cone: '진행 방향 인식 각도 (±도)', incSig: '신호위반 카메라 포함', incPark: '주정차 단속 카메라 포함', hwNote: '시속 90km 이상이면 1차 안내를 자동으로 800m 앞에서 해요.',
+    secHelp: '사용 방법 · 데이터 관리',
+    helpList: '<li>PC에서 공공데이터포털(data.go.kr)의 <b>전국무인교통단속카메라표준데이터</b>를 <b>CSV</b>로 내려받아 폰으로 옮겨요.</li><li>위의 <b>데이터 불러오기</b>로 CSV를 골라요. 폰에 저장돼서 다음부터는 필요 없어요.</li><li>와이파이에서 이 주소를 한 번 열고 크롬 ⋮ → <b>홈 화면에 추가</b>. 그다음부터는 인터넷 없이 열려요.</li><li>앱을 켜면 자동으로 시작돼요. 처음 위치를 잡을 땐 트인 곳에서 1~몇 분 걸릴 수 있어요.</li><li>한두 달에 한 번 새 CSV로 다시 불러오면 새 카메라가 반영돼요.</li>',
+    helpNote: '화면이 켜져 있을 때만 작동해요(시작하면 화면 꺼짐을 막아요). 이동식 카메라는 공공데이터에 없어 안내되지 않아요. 도로 표지판을 우선하세요. 단속구분 코드는 1=과속, 2=신호·과속, 3=신호, 4=주정차로 해석했어요.',
+    clear: '저장된 카메라 데이터 지우기', clearSure: '한 번 더 누르면 지워져요', cleared: '저장된 데이터를 지웠어요.',
+    dbNone: '데이터 없음', dbCount: '카메라 {n}', dbInfo: '저장된 파일: {f} · {n}개 · 불러온 날짜 {d}', dbInfoNone: '저장된 카메라 데이터가 없어요.',
+    gpsOff: 'GPS 꺼짐', gpsSearch: 'GPS 찾는 중', gpsWait: 'GPS 대기 중', gpsDenied: 'GPS 권한 없음', gpsWeak: 'GPS 약함 ±{a}m', gpsOk: 'GPS ±{a}m', gpsSim: '모의 주행',
+    errDenied: '위치 권한이 거부됐어요. 크롬 설정에서 위치를 허용해 주세요.', errUnavail: '위치를 찾을 수 없어요. 트인 곳으로 이동해 보세요.', errTimeout: '위치를 찾는 중이에요. 계속 시도할게요.', errOther: '위치 오류: ',
+    noGeo: '이 브라우저는 위치 기능을 지원하지 않아요.', insecure: '파일로 열면 위치가 막힐 수 있어요. https 주소로 열어 주세요.', needData: '카메라 데이터가 없어요. 먼저 데이터를 불러와 주세요.', needDataCsv: '먼저 카메라 데이터(CSV)를 불러와 주세요.',
+    simStart: '모의 주행: {p} 쪽으로 시속 {k}km로 다가가요', simStopped: '모의 주행을 멈췄어요.', simDone: '모의 주행이 끝났어요.', camera: '카메라',
+    testMsg: '소리가 작으면 폰 미디어 볼륨을 올려 주세요.', testMuted: '안내 방식이 "소리 끄기"라 소리가 나지 않아요.',
+    reading: '파일을 읽는 중이에요…', noCams: '카메라 위치를 하나도 찾지 못했어요', saveFail: '폰에 저장하지 못했어요. 이번 사용 중에만 쓸 수 있어요.', loaded: '카메라 {n}개를 불러왔어요{s}.', loadedSkip: ' (위치 없음·중복 {n}개 제외)', loadFail: '불러오기 실패: ',
+    nearNeedData: '먼저 카메라 데이터를 불러오세요', nearWait: '위치를 찾으면 표시돼요', nearNone: '1.5km 안에 카메라가 없어요', noPlace: '위치 정보 없음',
+    stReady: ['준비 중', '잠시만 기다려 주세요'], stLocating: ['위치를 찾는 중', '트인 곳에서 잠시 기다려 주세요'], stIdle: ['대기 중', '출발하면 앞쪽 카메라를 찾아요'], stClear: ['안전 운전 중', '진행 방향에 가까운 카메라가 없어요'], stNeedData: ['데이터가 필요해요', '설정에서 카메라 데이터를 불러와 주세요'], stPressStart: ['시작을 눌러 주세요', '위치를 찾으면 앞쪽 카메라를 알려드려요'],
+    t1: '과속', t2: '신호·과속', t3: '신호', t4: '주정차', tX: '단속', tEtc: '기타', section: '구간단속', camSuffix: ' 카메라', zone: '보호구역',
+    say_far: (m, c) => `${m}미터 앞에 ${c[6] ? '보호구역 ' : ''}${c[5] ? '구간단속 카메라가' : c[2] === '3' ? '신호위반 단속 카메라가' : c[2] === '2' ? '신호 과속 단속 카메라가' : '과속 단속 카메라가'} 있어요.${c[3] ? ` 제한속도는 ${c[3]}킬로미터예요.` : ''}`,
+    say_near: (m, c) => c[3] ? `${m}미터 앞이에요. 제한속도 ${c[3]}이에요.` : `${m}미터 앞에 카메라가 있어요.`,
+    say_over: '속도를 줄여 주세요.', say_start: '안내를 시작할게요.', say_test: '500미터 앞에 과속 단속 카메라가 있어요. 제한속도는 60킬로미터예요.', say_hello: '안녕하세요. 이 목소리로 안내해 드릴게요.'
+  },
+  en: {
+    simBadge: 'SIMULATION · not your real speed', start: 'Start', stop: 'Stop', settings: 'Settings', close: 'Close',
+    tapToEnable: 'Tap the screen once to turn on alerts', loadData: 'Load data', soundTest: 'Sound test', simulate: 'Simulate drive', simStop: 'Stop simulation',
+    secLang: 'Language · 언어', lang: 'Screen & voice language', langNote: 'Screen text and voice alerts switch to the selected language.',
+    secMode: 'Alert style', mode: 'How to alert', modeBoth: 'Voice + chime', modeBeep: 'Chime only (no voice)', modeVoice: 'Voice only', modeOff: 'Silent (screen only)',
+    modeNote_both: 'You hear a chime and a voice message as a camera gets close.', modeNote_beep: 'Chimes only, no speech: 1 at the first alert, 2 at the second, 3 quick ones when speeding.', modeNote_voice: 'Voice messages only, no chimes.', modeNote_off: 'No sound. Colours and numbers on screen only.',
+    secNear: 'Nearby cameras', secStart: 'Startup', autoStart: 'Start automatically when the app opens', orient: 'Screen orientation', orientAny: 'Auto-rotate', orientLand: 'Lock landscape (for a mount)', orientPort: 'Lock portrait',
+    orientNoteAny: 'The phone’s auto-rotate must be on.', orientNoteLand: 'Locked to landscape.', orientNotePort: 'Locked to portrait.', orientNoteFail: 'Locking works only in the app installed on the home screen. Turn on auto-rotate.',
+    soundRule: 'Browsers block sound until you touch the screen once. After auto-start, tap the blue banner at the bottom.',
+    secVoice: 'Voice', voiceName: 'Voice', rate: 'Speaking rate', pitch: 'Pitch', voiceTest: 'Try this voice',
+    voiceAuto: 'Automatic (soft female voice first)', voiceNet: ' (needs internet)', voiceNow: 'Current voice: {v}', voiceNone: 'No English voice found. Install English voice data in Settings → Accessibility → Text-to-speech.', voiceUnsupported: 'This browser does not support voice alerts.',
+    secAlert: 'Alerts', far: 'First alert distance (m)', near: 'Second alert distance (m)', tol: 'Speeding tolerance (km/h)', cone: 'Heading match angle (± degrees)', incSig: 'Include red-light cameras', incPark: 'Include parking cameras', hwNote: 'Above 90 km/h the first alert moves to 800 m automatically.',
+    secHelp: 'How to use · Data',
+    helpList: '<li>On a PC, download the <b>national unmanned traffic camera standard data</b> (전국무인교통단속카메라표준데이터) from data.go.kr as <b>CSV</b> and copy it to the phone.</li><li>Choose the CSV with <b>Load data</b> above. It is saved on the phone, so you only do this once.</li><li>Open this address once on Wi‑Fi, then Chrome ⋮ → <b>Add to Home screen</b>. After that it opens without internet.</li><li>The app starts by itself when opened. The first GPS fix can take a minute or more; stay in the open.</li><li>Load a fresh CSV every month or two to pick up new cameras.</li>',
+    helpNote: 'Works only while the screen is on (the app keeps it on). Mobile cameras are not in the public data. Always follow road signs. Camera type codes are read as 1 = speed, 2 = red light + speed, 3 = red light, 4 = parking.',
+    clear: 'Delete saved camera data', clearSure: 'Tap again to delete', cleared: 'Saved data deleted.',
+    dbNone: 'No data', dbCount: '{n} cameras', dbInfo: 'Saved file: {f} · {n} cameras · loaded {d}', dbInfoNone: 'No camera data saved.',
+    gpsOff: 'GPS off', gpsSearch: 'Finding GPS', gpsWait: 'Waiting for GPS', gpsDenied: 'No GPS permission', gpsWeak: 'Weak GPS ±{a}m', gpsOk: 'GPS ±{a}m', gpsSim: 'Simulation',
+    errDenied: 'Location permission was denied. Allow location in Chrome settings.', errUnavail: 'Cannot find your location. Move somewhere open.', errTimeout: 'Still looking for your location…', errOther: 'Location error: ',
+    noGeo: 'This browser does not support location.', insecure: 'Opened as a file, location may be blocked. Open the https address instead.', needData: 'No camera data yet. Load the data first.', needDataCsv: 'Load the camera data (CSV) first.',
+    simStart: 'Simulation: approaching {p} at {k} km/h', simStopped: 'Simulation stopped.', simDone: 'Simulation finished.', camera: 'camera',
+    testMsg: 'If it is quiet, turn up the phone’s media volume.', testMuted: 'Alert style is “Silent”, so there is no sound.',
+    reading: 'Reading the file…', noCams: 'No camera locations found', saveFail: 'Could not save on the phone. It works for this session only.', loaded: 'Loaded {n} cameras{s}.', loadedSkip: ' ({n} without location or duplicate skipped)', loadFail: 'Load failed: ',
+    nearNeedData: 'Load the camera data first', nearWait: 'Shown once your location is found', nearNone: 'No cameras within 1.5 km', noPlace: 'No location name',
+    stReady: ['Getting ready', 'One moment please'], stLocating: ['Finding your location', 'Wait a moment somewhere open'], stIdle: ['Standing by', 'Cameras ahead appear once you move'], stClear: ['Drive safely', 'No cameras close ahead'], stNeedData: ['Data needed', 'Load the camera data in Settings'], stPressStart: ['Press Start', 'Cameras ahead appear once your location is found'],
+    t1: 'Speed', t2: 'Red light + speed', t3: 'Red light', t4: 'Parking', tX: 'Enforcement', tEtc: 'Other', section: 'Average speed zone', camSuffix: ' camera', zone: 'Protected zone',
+    say_far: (m, c) => `${c[5] ? 'Average speed zone' : c[2] === '3' ? 'Red light camera' : c[2] === '2' ? 'Red light and speed camera' : 'Speed camera'}${c[6] ? ' in a protected zone' : ''} in ${m} meters.${c[3] ? ` Speed limit ${c[3]} kilometers per hour.` : ''}`,
+    say_near: (m, c) => c[3] ? `${m} meters. Speed limit ${c[3]}.` : `Camera in ${m} meters.`,
+    say_over: 'Please slow down.', say_start: 'Alerts are on.', say_test: 'Speed camera in 500 meters. Speed limit 60 kilometers per hour.', say_hello: 'Hello. I will guide you with this voice.'
+  }
+};
+const T = (k, v) => { let s = (L[S.lang] || L.ko)[k]; if (s == null) s = L.ko[k]; if (typeof s === 'string' && v) for (const x in v) s = s.split('{' + x + '}').join(v[x]); return s; };
+const typeName = code => T('t' + code) || T('tX');
+const locale = () => S.lang === 'en' ? 'en-US' : 'ko-KR';
+const useVoice = () => S.mode === 'both' || S.mode === 'voice';
+const useChime = () => S.mode === 'both' || S.mode === 'beep';
 
 let all = [], act = [], grid = new Map(), meta = null;
 let watchId = null, simTimer = null, wake = null, actx = null, step = createEngine();
 let prev = null, anchor = null, lastHead = null, lastBeep = 0, lastOverSay = 0, lastFix = null;
+let uiState = 'stReady';
 
 const msg = t => { $('msg').textContent = t || ''; $('msg2').textContent = t || ''; };
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function applyLang() {
+  document.documentElement.lang = S.lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = T(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = T(el.dataset.i18nHtml); }); // 고정 문구(사전)만 넣음
+  $('bStart').textContent = (watchId != null) ? T('stop') : T('start');
+  $('bSim').textContent = simTimer ? T('simStop') : T('simulate');
+  $('modeNote').textContent = T('modeNote_' + S.mode);
+  applyFilter(); showMeta(); fillVoices(); applyOrient(); setState(uiState); renderNear(lastNear, lastFix && lastFix.lat);
+  if (watchId == null && !simTimer) setGps(T('gpsOff'), '');
+}
 
 /* 시계 */
 function tick() { const d = new Date(); $('clock').textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
@@ -346,7 +439,7 @@ $('segs').innerHTML = '<i></i>'.repeat(10);
 function gauge(d, far) {
   const segs = $('segs').children;
   const n = d == null ? 0 : Math.max(1, Math.min(10, Math.ceil((1 - Math.min(d, far) / far) * 10)));
-  for (let k = 0; k < 10; k++) { const s = segs[k]; s.className = k < n ? ('on' + (k >= 8 ? ' r' : k >= 5 ? ' a' : '')) : ''; }
+  for (let k = 0; k < 10; k++) segs[k].className = k < n ? ('on' + (k >= 8 ? ' r' : k >= 5 ? ' a' : '')) : '';
   $('dist').textContent = d == null ? '— m' : (d >= 1000 ? (d / 1000).toFixed(1) + ' km' : Math.round(d / 10) * 10 + ' m');
 }
 
@@ -359,82 +452,96 @@ function applyFilter() {
   act = all.filter(c => (S.park || c[2] !== '4') && (S.sig || c[2] !== '3'));
   grid = buildGrid(act);
   const el = $('cDb');
-  if (!all.length) { el.textContent = '데이터 없음'; el.className = 'chip bad'; return; }
-  el.textContent = `카메라 ${act.length.toLocaleString('ko-KR')}`; el.className = 'chip ok';
+  if (!all.length) { el.textContent = T('dbNone'); el.className = 'chip bad'; return; }
+  el.textContent = T('dbCount', { n: act.length.toLocaleString(locale()) }); el.className = 'chip ok';
 }
-function showMeta() { $('dbInfo').textContent = meta ? `저장된 파일: ${meta.name} · ${meta.count.toLocaleString('ko-KR')}개 · 불러온 날짜 ${meta.date}` : '저장된 카메라 데이터가 없어요.'; }
+function showMeta() { $('dbInfo').textContent = meta ? T('dbInfo', { f: meta.name, n: meta.count.toLocaleString(locale()), d: meta.date }) : T('dbInfoNone'); }
 
-/* 음성: 시리처럼 부드러운 한국어 여성 목소리를 우선 고름 */
-function koVoices() { try { return speechSynthesis.getVoices().filter(v => /^ko/i.test(v.lang)); } catch (e) { return []; } }
+/* 음성: 고른 언어의 부드러운 여성 목소리를 우선 */
+function langVoices() { try { const re = S.lang === 'en' ? /^en/i : /^ko/i; return speechSynthesis.getVoices().filter(v => re.test(v.lang)); } catch (e) { return []; } }
 function voiceScore(v) {
   const n = (v.name + ' ' + (v.voiceURI || '')).toLowerCase(); let s = 0;
-  if (v.localService) s += 50;                       // 인터넷 없이 되는 목소리
-  if (/yuna|siri|유나/.test(n)) s += 40;              // 아이폰 한국어 기본(시리 계열) 여성 음성
+  if (v.localService) s += 50;
+  if (/network/.test(n)) s -= 40;
   if (/enhanced|premium|고품질|향상/.test(n)) s += 15;
-  if (/female|여성|ism|kob|sora|heami|seoyeon|sunhi|jimin/.test(n)) s += 20;
-  if (/male|남성|koc|kod|injoon|hyunsu|minho/.test(n) && !/female/.test(n)) s -= 30;
-  if (/network/.test(n)) s -= 40;                    // 인터넷이 필요한 목소리는 뒤로
+  if (S.lang === 'en') {
+    if (/en[-_]us/i.test(v.lang)) s += 10;
+    if (/samantha|siri|ava|allison|karen|susan|zoe|female|sfg|tpf|iog/.test(n)) s += 30;
+    if (/\b(daniel|alex|fred|tom|aaron|male)\b|iol|iom|tpd/.test(n) && !/female/.test(n)) s -= 30;
+  } else {
+    if (/yuna|siri|유나/.test(n)) s += 40;
+    if (/female|여성|ism|kob|sora|heami|seoyeon|sunhi|jimin/.test(n)) s += 20;
+    if (/male|남성|koc|kod|injoon|hyunsu|minho/.test(n) && !/female/.test(n)) s -= 30;
+  }
   return s;
 }
+const vKey = () => 'voice_' + S.lang;
 function pickVoice() {
-  const vs = koVoices(); if (!vs.length) return null;
-  if (S.voiceName) { const v = vs.find(x => x.name === S.voiceName); if (v) return v; }
+  const vs = langVoices(); if (!vs.length) return null;
+  if (S[vKey()]) { const v = vs.find(x => x.name === S[vKey()]); if (v) return v; }
   return vs.slice().sort((a, b) => voiceScore(b) - voiceScore(a))[0];
 }
 function fillVoices() {
-  const sel = $('sVoiceName'), vs = koVoices().slice().sort((a, b) => voiceScore(b) - voiceScore(a));
+  const sel = $('sVoiceName'), vs = langVoices().slice().sort((a, b) => voiceScore(b) - voiceScore(a));
   sel.textContent = '';
-  const auto = document.createElement('option'); auto.value = ''; auto.textContent = '자동 (부드러운 여성 목소리 우선)'; sel.appendChild(auto);
-  vs.forEach(v => { const o = document.createElement('option'); o.value = v.name; o.textContent = v.name + (v.localService ? '' : ' (인터넷 필요)'); sel.appendChild(o); });
-  sel.value = vs.some(v => v.name === S.voiceName) ? S.voiceName : '';
+  const auto = document.createElement('option'); auto.value = ''; auto.textContent = T('voiceAuto'); sel.appendChild(auto);
+  vs.forEach(v => { const o = document.createElement('option'); o.value = v.name; o.textContent = v.name + (v.localService ? '' : T('voiceNet')); sel.appendChild(o); });
+  sel.value = vs.some(v => v.name === S[vKey()]) ? S[vKey()] : '';
   const p = pickVoice();
-  $('voiceNote').textContent = !('speechSynthesis' in window) ? '이 브라우저는 음성 안내를 지원하지 않아요.' : (vs.length ? `지금 목소리: ${p ? p.name : '-'}` : '한국어 음성이 없어요. 폰 설정에서 한국어 음성 데이터를 설치해 주세요.');
+  $('voiceNote').textContent = !('speechSynthesis' in window) ? T('voiceUnsupported') : (vs.length ? T('voiceNow', { v: p ? p.name : '-' }) : T('voiceNone'));
 }
-function say(t) {
-  if (!S.voice || !('speechSynthesis' in window)) return;
-  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; const v = pickVoice(); if (v) u.voice = v; u.rate = +S.rate || 1; u.pitch = +S.pitch || 1; u.volume = 1; speechSynthesis.speak(u); } catch (e) {}
+function say(t, force) {
+  if ((!force && !useVoice()) || !('speechSynthesis' in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = locale(); const v = pickVoice(); if (v) u.voice = v; u.rate = +S.rate || 1; u.pitch = +S.pitch || 1; u.volume = 1; speechSynthesis.speak(u); } catch (e) {}
 }
 
 function bindSettings() {
   [['sFar', 'far'], ['sNear', 'near'], ['sTol', 'tol'], ['sCone', 'cone']].forEach(([id, k]) => { const el = $(id); el.value = S[k]; el.addEventListener('change', () => { const v = parseFloat(el.value); if (!isNaN(v)) { S[k] = v; saveS(); } }); });
-  [['sAuto', 'auto'], ['sVoice', 'voice'], ['sBeep', 'beep'], ['sSig', 'sig'], ['sPark', 'park']].forEach(([id, k]) => { const el = $(id); el.checked = !!S[k]; el.addEventListener('change', () => { S[k] = el.checked; saveS(); if (k === 'sig' || k === 'park') applyFilter(); }); });
+  [['sAuto', 'auto'], ['sSig', 'sig'], ['sPark', 'park']].forEach(([id, k]) => { const el = $(id); el.checked = !!S[k]; el.addEventListener('change', () => { S[k] = el.checked; saveS(); if (k === 'sig' || k === 'park') applyFilter(); }); });
   [['sRate', 'rate'], ['sPitch', 'pitch']].forEach(([id, k]) => { const el = $(id); el.value = S[k]; el.addEventListener('change', () => { S[k] = parseFloat(el.value); saveS(); }); });
-  $('sVoiceName').addEventListener('change', e => { S.voiceName = e.target.value; saveS(); fillVoices(); say('안녕하세요. 이 목소리로 안내해 드릴게요.'); });
+  $('sVoiceName').addEventListener('change', e => { S[vKey()] = e.target.value; saveS(); fillVoices(); ensureAudio(); say(T('say_hello'), true); });
+  $('sLang').value = S.lang; $('sLang').addEventListener('change', e => { S.lang = e.target.value; saveS(); applyLang(); msg(''); ensureAudio(); say(T('say_hello'), true); });
+  $('sMode').value = S.mode; $('sMode').addEventListener('change', e => { S.mode = e.target.value; saveS(); $('modeNote').textContent = T('modeNote_' + S.mode); ensureAudio(); testLine(); });
 }
 
 /* 소리 */
 function ensureAudio() { try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch (e) {} }
-function chime(n = 1, f = 1046) { // 부드러운 차임 (사인파 + 짧은 여운)
-  if (!S.beep || !actx) return;
-  try { for (let k = 0; k < n; k++) { const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + k * 0.2; o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.55, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); o.start(t); o.stop(t + 0.37); } } catch (e) {}
+function chime(n = 1, f = 1046, gap = 0.2) {
+  if (!useChime() || !actx) return;
+  try { for (let k = 0; k < n; k++) { const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + k * gap; o.type = 'sine'; o.frequency.value = f; o.connect(g); g.connect(actx.destination); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.6, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); o.start(t); o.stop(t + 0.37); } } catch (e) {}
 }
 async function lockScreen() { try { if ('wakeLock' in navigator && !wake) { wake = await navigator.wakeLock.request('screen'); wake.addEventListener('release', () => { wake = null; }); } } catch (e) {} }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && (watchId != null || simTimer)) lockScreen(); });
 
 function setGps(text, cls) { const el = $('cGps'); el.textContent = text; el.className = 'chip ' + (cls || ''); }
+function setState(k) { uiState = k; if (k === 'target') return; const [t, p] = T(k); $('info').innerHTML = `<div class="t">${esc(t)}</div><div class="p">${esc(p)}</div>`; }
 
 function render(speed, lat, target, over, far) {
   $('spd').textContent = speed == null ? '0' : Math.round(speed);
-  const sign = $('sign'), info = $('info');
+  const sign = $('sign');
   if (target) {
     const c = act[target.i];
-    if (c[3]) { sign.className = 'sign'; sign.textContent = c[3]; } else { sign.className = 'sign none'; sign.textContent = TYPES[c[2]] || '단속'; }
-    info.innerHTML = `<div class="t">${esc(c[5] ? '구간단속' : (TYPES[c[2]] || '단속') + ' 카메라')}${c[6] ? ' · 보호구역' : ''}</div><div class="p">${esc(c[4] || '')}</div>`;
+    if (c[3]) { sign.className = 'sign'; sign.textContent = c[3]; } else { sign.className = 'sign none'; sign.textContent = typeName(c[2]); }
+    uiState = 'target';
+    $('info').innerHTML = `<div class="t">${esc(c[5] ? T('section') : typeName(c[2]) + T('camSuffix'))}${c[6] ? ' · ' + esc(T('zone')) : ''}</div><div class="p">${esc(c[4] || '')}</div>`;
     gauge(target.d, far);
   } else {
     sign.className = 'sign none'; sign.textContent = '—'; gauge(null, far);
-    info.innerHTML = lat == null ? '<div class="t">위치를 찾는 중</div><div class="p">트인 곳에서 잠시 기다려 주세요</div>' : (lastHead == null ? '<div class="t">대기 중</div><div class="p">출발하면 앞쪽 카메라를 찾아요</div>' : '<div class="t">안전 운전 중</div><div class="p">진행 방향에 가까운 카메라가 없어요</div>');
+    setState(lat == null ? 'stLocating' : (lastHead == null ? 'stIdle' : 'stClear'));
   }
   document.body.classList.toggle('alarm', !!over);
   document.body.classList.toggle('caution', !over && !!target && target.d <= S.near);
 }
+let lastNear = [];
 function renderNear(list, lat) {
-  const ul = $('near');
-  if (!act.length) { ul.innerHTML = '<li><span class="d">—</span><span class="pl">먼저 카메라 데이터를 불러오세요</span><span></span></li>'; return; }
-  if (lat == null) { ul.innerHTML = '<li><span class="d">—</span><span class="pl">위치를 찾으면 표시돼요</span><span></span></li>'; return; }
-  if (!list.length) { ul.innerHTML = '<li><span class="d">—</span><span class="pl">1.5km 안에 카메라가 없어요</span><span></span></li>'; return; }
-  ul.innerHTML = list.slice(0, 6).map(n => { const c = act[n.i]; return `<li><span class="d">${n.d < 1000 ? Math.round(n.d) + ' m' : (n.d / 1000).toFixed(1) + ' km'}</span><span class="pl">${esc(c[4] || '위치 정보 없음')}<em>${esc(c[5] ? '구간단속' : (TYPES[c[2]] || '기타'))}${c[6] ? ' · 보호구역' : ''}</em></span><span class="lim${c[3] ? '' : ' none'}">${c[3] || '—'}</span></li>`; }).join('');
+  lastNear = list || [];
+  const ul = $('near'), line = t => `<li><span class="d">—</span><span class="pl">${esc(t)}</span><span></span></li>`;
+  if (!act.length) { ul.innerHTML = line(T('nearNeedData')); return; }
+  if (lat == null) { ul.innerHTML = line(T('nearWait')); return; }
+  if (!lastNear.length) { ul.innerHTML = line(T('nearNone')); return; }
+  ul.innerHTML = lastNear.slice(0, 6).map(n => { const c = act[n.i]; if (!c) return ''; return `<li><span class="d">${n.d < 1000 ? Math.round(n.d) + ' m' : (n.d / 1000).toFixed(1) + ' km'}</span><span class="pl">${esc(c[4] || T('noPlace'))}<em>${esc(c[5] ? T('section') : typeName(c[2]))}${c[6] ? ' · ' + esc(T('zone')) : ''}</em></span><span class="lim${c[3] ? '' : ' none'}">${c[3] || '—'}</span></li>`; }).join('');
 }
+function sayPhrase(kind, c, d) { const m = Math.max(50, Math.round(d / 50) * 50); return T('say_' + kind)(m, c); }
 
 let spdBuf = [], hist = [];
 function onPos(p) {
@@ -442,14 +549,11 @@ function onPos(p) {
   const acc = accuracy == null ? 999 : accuracy, isSim = !!p.sim;
   lastFix = { lat, lon };
   const weak = acc > 50;
-  setGps(isSim ? '모의 주행' : (weak ? `GPS 약함 ±${Math.round(acc)}m` : `GPS ±${Math.round(acc)}m`), isSim ? 'warn' : (weak ? 'warn' : 'ok'));
-  /* 속도: 폰 GPS 칩이 계산한 속도를 우선 사용. 없을 때만 위치 변화로 계산하되,
-     정확도보다 작게 움직인 건 GPS 흔들림으로 보고 0으로 처리 */
+  setGps(isSim ? T('gpsSim') : (weak ? T('gpsWeak', { a: Math.round(acc) }) : T('gpsOk', { a: Math.round(acc) })), isSim || weak ? 'warn' : 'ok');
+  /* 속도: 폰 GPS 칩이 계산한 속도를 우선. 없을 때만 3초 이상 꾸준한 이동을 속도로 인정 */
   let raw = (speed != null && !isNaN(speed) && speed >= 0) ? speed * 3.6 : null;
   hist.push({ lat, lon, ts, acc }); while (hist.length > 6) hist.shift();
   if (raw == null && hist.length >= 4) {
-    /* GPS 칩 속도가 없을 때만: 3초 이상, 매번 처음 지점에서 점점 멀어지고,
-       이동 거리가 오차의 2.5배를 넘을 때만 '진짜 움직임'으로 인정 */
     const h = hist.slice(-4), o = h[0], dt = (ts - o.ts) / 1000;
     let mono = true; for (let k = 1; k < h.length; k++) { if (dist(o.lat, o.lon, h[k].lat, h[k].lon) <= dist(o.lat, o.lon, h[k - 1].lat, h[k - 1].lon)) mono = false; }
     const dd = dist(o.lat, o.lon, lat, lon), maxAcc = Math.max(...h.map(x => x.acc));
@@ -458,31 +562,33 @@ function onPos(p) {
   if (raw != null && raw > 260) raw = null;
   prev = { lat, lon, ts, acc };
   if (raw != null) { spdBuf.push(raw); if (spdBuf.length > 3) spdBuf.shift(); }
-  let spd = spdBuf.length ? spdBuf.slice().sort((a, b) => a - b)[Math.floor(spdBuf.length / 2)] : null; // 최근 3개 중간값
+  let spd = spdBuf.length ? spdBuf.slice().sort((a, b) => a - b)[Math.floor(spdBuf.length / 2)] : null;
   if (weak && !isSim) spd = spd == null ? null : Math.min(spd, raw == null ? spd : raw);
   if (spd != null && spd < 4) spd = 0;
-  /* 진행 방향: 실제로 움직일 때만(시속 8km 이상) 계산 */
   let hd = (heading != null && !isNaN(heading) && spd != null && spd >= 8) ? heading : null;
   if (!anchor) anchor = { lat, lon };
-  const moved = dist(anchor.lat, anchor.lon, lat, lon);
-  if (moved >= Math.max(15, acc * 1.5)) { if (hd == null && spd != null && spd >= 8) hd = bearing(anchor.lat, anchor.lon, lat, lon); anchor = { lat, lon }; }
+  if (dist(anchor.lat, anchor.lon, lat, lon) >= Math.max(15, acc * 1.5)) { if (hd == null && spd != null && spd >= 8) hd = bearing(anchor.lat, anchor.lon, lat, lon); anchor = { lat, lon }; }
   if (hd != null) lastHead = hd;
-    document.body.classList.toggle('sim', isSim);
+  document.body.classList.toggle('sim', isSim);
   const far = (spd || 0) >= 90 ? Math.max(S.far, 800) : S.far;
   if (!act.length) { render(spd, lat, null, false, far); renderNear([], lat); return; }
   const list = nearby(grid, act, lat, lon, Math.max(far + 200, 1500));
   renderNear(list, lat);
   const target = (spd != null && spd >= 8 && (isSim || acc <= 50)) ? pickAhead(list.filter(n => n.d <= far + 200), act, lat, lon, lastHead, S.cone) : null;
   const now = Date.now(), ev = step(target, far, S.near, now);
-  if (target) { const c = act[target.i]; if (ev.includes('near')) { chime(2, 1175); say(phrase('near', c, target.d)); } else if (ev.includes('far')) { chime(1, 988); say(phrase('far', c, target.d)); } }
+  if (target) {
+    const c = act[target.i];
+    if (ev.includes('near')) { chime(2, 1175); say(sayPhrase('near', c, target.d)); }
+    else if (ev.includes('far')) { chime(1, 988); say(sayPhrase('far', c, target.d)); }
+  }
   const c = target && act[target.i];
   const over = !!(c && c[3] && target.d <= far && spd != null && spd > c[3] + S.tol);
-  if (over && now - lastBeep > 1800) { lastBeep = now; chime(3, 1397); if (now - lastOverSay > 12000) { lastOverSay = now; setTimeout(() => say('속도를 줄여 주세요.'), 700); } }
+  if (over && now - lastBeep > 1800) { lastBeep = now; chime(3, 1397, 0.14); if (now - lastOverSay > 12000) { lastOverSay = now; setTimeout(() => say(T('say_over')), 700); } }
   render(spd, lat, target, over, far);
 }
 function onErr(e) {
-  const t = { 1: '위치 권한이 거부됐어요. 크롬 설정에서 위치를 허용해 주세요.', 2: '위치를 찾을 수 없어요. 트인 곳으로 이동해 보세요.', 3: '위치를 찾는 중이에요. 계속 시도할게요.' }[e.code] || ('위치 오류: ' + e.message);
-  setGps(e.code === 1 ? 'GPS 권한 없음' : 'GPS 대기 중', e.code === 1 ? 'bad' : 'warn'); msg(t);
+  const t = { 1: T('errDenied'), 2: T('errUnavail'), 3: T('errTimeout') }[e.code] || (T('errOther') + e.message);
+  setGps(e.code === 1 ? T('gpsDenied') : T('gpsWait'), e.code === 1 ? 'bad' : 'warn'); msg(t);
 }
 
 function stopAll() {
@@ -490,61 +596,60 @@ function stopAll() {
   if (simTimer) { clearInterval(simTimer); simTimer = null; }
   try { if (wake) wake.release(); } catch (e) {}
   wake = null; prev = null; anchor = null; lastHead = null; spdBuf = []; hist = []; step = createEngine(); document.body.classList.remove('sim');
-  $('bStart').textContent = '시작'; $('bStart').classList.remove('on'); $('bSim').textContent = '모의 주행';
-  document.body.classList.remove('alarm', 'caution'); setGps('GPS 꺼짐', '');
+  $('bStart').textContent = T('start'); $('bStart').classList.remove('on'); $('bSim').textContent = T('simulate');
+  document.body.classList.remove('alarm', 'caution'); setGps(T('gpsOff'), '');
 }
 function start() {
   ensureAudio();
-  if (!('geolocation' in navigator)) { msg('이 브라우저는 위치 기능을 지원하지 않아요.'); return; }
-  if (!window.isSecureContext) msg('파일로 열면 위치가 막힐 수 있어요. https 주소로 열어 주세요.');
-  else if (!all.length) msg('카메라 데이터가 없어요. 먼저 데이터를 불러와 주세요.'); else msg('');
+  if (!('geolocation' in navigator)) { msg(T('noGeo')); return; }
+  if (!window.isSecureContext) msg(T('insecure')); else if (!all.length) msg(T('needData')); else msg('');
   stopAll();
   watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy: true, maximumAge: 0, timeout: 30000 });
-  setGps('GPS 찾는 중', 'warn'); lockScreen(); render(0, null, null, false, S.far);
-  $('bStart').textContent = '정지'; $('bStart').classList.add('on');
+  setGps(T('gpsSearch'), 'warn'); lockScreen(); render(0, null, null, false, S.far);
+  $('bStart').textContent = T('stop'); $('bStart').classList.add('on');
 }
 function sim() {
   ensureAudio();
-  if (simTimer) { stopAll(); msg('모의 주행을 멈췄어요.'); return; }
-  if (!act.length) { msg('먼저 카메라 데이터를 불러와 주세요.'); return; }
+  if (simTimer) { stopAll(); msg(T('simStopped')); return; }
+  if (!act.length) { msg(T('needData')); return; }
   stopAll();
   let cam = null;
   if (lastFix) { const n = nearby(grid, act, lastFix.lat, lastFix.lon, 1500).find(x => act[x.i][3] > 0); if (n) cam = act[n.i]; }
   if (!cam) cam = act.find(c => c[3] > 0) || act[0];
   const kmh = Math.max(40, (cam[3] || 50) + 15), mps = kmh / 3.6;
   let pos = offset(cam[0], cam[1], 180, 900), n = 0;
-  msg(`모의 주행: ${cam[4] || '카메라'} 쪽으로 시속 ${kmh}km로 다가가요`);
+  msg(T('simStart', { p: cam[4] || T('camera'), k: kmh }));
   simTimer = setInterval(() => {
     pos = offset(pos[0], pos[1], 0, mps); n++;
     onPos({ sim: true, coords: { latitude: pos[0], longitude: pos[1], speed: mps, heading: 0, accuracy: 5 }, timestamp: Date.now() });
-    if (n * mps > 1050) { stopAll(); msg('모의 주행이 끝났어요.'); }
+    if (n * mps > 1050) { stopAll(); msg(T('simDone')); }
   }, 1000);
-  lockScreen(); $('bSim').textContent = '모의 주행 멈춤'; closeSheet();
+  lockScreen(); $('bSim').textContent = T('simStop'); closeSheet();
 }
 
 $('bStart').addEventListener('click', () => { if (watchId != null) { stopAll(); msg(''); } else start(); });
 $('bSim').addEventListener('click', sim);
-const testLine = () => { ensureAudio(); chime(1, 988); setTimeout(() => say('500미터 앞에 과속 단속 카메라가 있어요. 제한속도는 60킬로미터예요.'), 350); };
-$('bTest').addEventListener('click', () => { testLine(); msg(S.voice && !('speechSynthesis' in window) ? '이 브라우저는 음성 안내를 지원하지 않아요.' : '소리가 작으면 폰 미디어 볼륨을 올려 주세요.'); });
-$('bVoiceTest').addEventListener('click', testLine);
+function testLine() { ensureAudio(); chime(1, 988); setTimeout(() => say(T('say_test')), useChime() ? 350 : 0); }
+$('bTest').addEventListener('click', () => { testLine(); msg(S.mode === 'off' ? T('testMuted') : (useVoice() && !('speechSynthesis' in window) ? T('voiceUnsupported') : T('testMsg'))); });
+$('bVoiceTest').addEventListener('click', () => { ensureAudio(); say(T('say_test'), true); });
 $('fIn').addEventListener('change', async e => {
   const f = e.target.files && e.target.files[0]; if (!f) return;
-  msg('파일을 읽는 중이에요…');
+  msg(T('reading'));
   try {
     const { cams, skipped } = parseText(decodeBuf(await f.arrayBuffer()));
-    if (!cams.length) throw new Error('카메라 위치를 하나도 찾지 못했어요');
-    all = cams; meta = { name: f.name, count: cams.length, date: new Date().toLocaleDateString('ko-KR') };
-    try { await dbPut('cams', all); await dbPut('meta', meta); } catch (er) { msg('폰에 저장하지 못했어요. 이번 사용 중에만 쓸 수 있어요.'); }
+    if (!cams.length) throw new Error(T('noCams'));
+    all = cams; meta = { name: f.name, count: cams.length, date: new Date().toLocaleDateString(locale()) };
+    try { await dbPut('cams', all); await dbPut('meta', meta); } catch (er) { msg(T('saveFail')); }
     applyFilter(); showMeta(); renderNear([], lastFix && lastFix.lat);
-    msg(`카메라 ${cams.length.toLocaleString('ko-KR')}개를 불러왔어요${skipped ? ` (위치 없음·중복 ${skipped.toLocaleString('ko-KR')}개 제외)` : ''}.`);
-  } catch (er) { msg('불러오기 실패: ' + er.message); }
+    msg(T('loaded', { n: cams.length.toLocaleString(locale()), s: skipped ? T('loadedSkip', { n: skipped.toLocaleString(locale()) }) : '' }));
+  } catch (er) { msg(T('loadFail') + er.message); }
   e.target.value = '';
 });
 $('bClear').addEventListener('click', async () => {
   const b = $('bClear');
-  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = '한 번 더 누르면 지워져요'; setTimeout(() => { b.dataset.sure = ''; b.textContent = '저장된 카메라 데이터 지우기'; }, 4000); return; }
+  if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = T('clearSure'); setTimeout(() => { b.dataset.sure = ''; b.textContent = T('clear'); }, 4000); return; }
   all = []; meta = null; try { await dbPut('cams', []); await dbPut('meta', null); } catch (e) {}
-  applyFilter(); showMeta(); renderNear([]); b.dataset.sure = ''; b.textContent = '저장된 카메라 데이터 지우기'; msg('저장된 데이터를 지웠어요.');
+  applyFilter(); showMeta(); renderNear([]); b.dataset.sure = ''; b.textContent = T('clear'); msg(T('cleared'));
 });
 if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); speechSynthesis.addEventListener('voiceschanged', fillVoices); } catch (e) {} }
 
@@ -552,9 +657,9 @@ if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); speechSynt
 function applyOrient() {
   try {
     const o = screen.orientation; if (!o) return;
-    if (S.orient === 'any') { if (o.unlock) o.unlock(); $('orientNote').textContent = '폰의 자동 회전이 켜져 있어야 돌아가요.'; return; }
-    o.lock(S.orient === 'landscape' ? 'landscape' : 'portrait').then(() => { $('orientNote').textContent = S.orient === 'landscape' ? '가로로 고정했어요.' : '세로로 고정했어요.'; })
-      .catch(() => { $('orientNote').textContent = '고정은 홈 화면에 설치한 앱에서만 돼요. 폰의 자동 회전을 켜 주세요.'; });
+    if (S.orient === 'any') { if (o.unlock) o.unlock(); $('orientNote').textContent = T('orientNoteAny'); return; }
+    o.lock(S.orient === 'landscape' ? 'landscape' : 'portrait').then(() => { $('orientNote').textContent = S.orient === 'landscape' ? T('orientNoteLand') : T('orientNotePort'); })
+      .catch(() => { $('orientNote').textContent = T('orientNoteFail'); });
   } catch (e) {}
 }
 $('sOrient').value = S.orient || 'any';
@@ -574,18 +679,18 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('sheet'
 let unlocked = false;
 function unlock() {
   if (unlocked) return; unlocked = true; $('tap').hidden = true;
-  ensureAudio(); applyOrient(); if (watchId != null || simTimer) { chime(1, 988); say('안내를 시작할게요.'); }
+  ensureAudio(); applyOrient(); if (watchId != null || simTimer) { chime(1, 988); say(T('say_start')); }
 }
 ['pointerdown', 'keydown'].forEach(ev => document.addEventListener(ev, unlock, { capture: true }));
 
-bindSettings(); fillVoices(); applyFilter(); showMeta(); gauge(null, S.far); applyOrient();
-render(0, null, null, false, S.far); $('info').innerHTML = '<div class="t">준비 중</div><div class="p">잠시만 기다려 주세요</div>';
+bindSettings(); applyLang(); gauge(null, S.far); setState('stReady'); saveS();
+try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('any').catch(() => {}); } catch (e) {}
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) { navigator.serviceWorker.register('sw.js').catch(() => {}); }
 (async () => {
   try { const c = await dbGet('cams'); const m = await dbGet('meta'); if (Array.isArray(c) && c.length) { all = c; meta = m || null; applyFilter(); showMeta(); } } catch (e) {}
-  if (!all.length) { $('info').innerHTML = '<div class="t">데이터가 필요해요</div><div class="p">설정에서 카메라 데이터를 불러와 주세요</div>'; openSheet(); msg('먼저 카메라 데이터(CSV)를 불러와 주세요.'); return; }
-  if (S.auto) { start(); if (!unlocked) $('tap').hidden = false; }
-  else $('info').innerHTML = '<div class="t">시작을 눌러 주세요</div><div class="p">위치를 찾으면 앞쪽 카메라를 알려드려요</div>';
+  if (!all.length) { setState('stNeedData'); openSheet(); msg(T('needDataCsv')); return; }
+  if (S.auto) { start(); if (!unlocked && S.mode !== 'off') $('tap').hidden = false; }
+  else setState('stPressStart');
 })();
 
 }
